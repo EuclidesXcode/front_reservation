@@ -1,0 +1,8 @@
+version: 0.1.0
+files:
+  - url: my-market-Setup-0.1.0.exe
+    sha512: RC8TcsHLUzgbLS02vQZmARYpHTIXldVxCph/LH9eHXO2KQPYCSnoYMhWNghA8xizhchbGWt2Uvt/OcqOQbMcHQ==
+    size: 47209233
+path: my-market-Setup-0.1.0.exe
+sha512: RC8TcsHLUzgbLS02vQZmARYpHTIXldVxCph/LH9eHXO2KQPYCSnoYMhWNghA8xizhchbGWt2Uvt/OcqOQbMcHQ==
+releaseDate: '2020-08-24T05:03:50.492Z'

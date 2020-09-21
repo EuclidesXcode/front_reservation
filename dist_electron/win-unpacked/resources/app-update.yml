@@ -1,0 +1,4 @@
+owner: mymarket-retaguarda
+repo: rp_front
+provider: github
+updaterCacheDirName: my-market-updater
