@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Dashboard from '../components/Dashboard/Index.vue'
+import Config from '../components/Config/Index.vue'
 import Reservation from '../components/Reservation/Reservation.vue'
 import People from '../components/People/People.vue'
 import Users from '../components/Users/Users.vue'
@@ -25,7 +26,11 @@ const router = new Router({
     {
       path: '/users',
       component: Users
-    }
+    },
+    {
+      path: '/config',
+      component: Config
+    },
   ]
 });
 

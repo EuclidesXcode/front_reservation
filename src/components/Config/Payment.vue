@@ -7,17 +7,8 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.productName" label="Produto"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.ean" label="EAN-13"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.quant" label="Estoque"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.price" label="Preço"></v-text-field>
+                  <v-col cols="12" sm="6" md="12">
+                    <v-text-field v-model="editedItem.productName" label="Forma de Pagamento"></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -34,13 +25,13 @@
     </template>
 
     <v-card-title>
-      Agendamentos
+      Formas de Pagamento
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
-        label="Consulte agendamentos por N° de cadastro ou responsável..."
+        label="Consulte formas de pagamento por nome"
       ></v-text-field>
     </v-card-title>
 
@@ -70,63 +61,15 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Novo Agendamento</span>
+            <span class="headline">Nova forma de Pagamento</span>
             <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="4">
-                  <v-text-field v-model="barCod" label="Selecione o Cliente"></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <v-text-field v-model="internCod" label="Selecione o Ensaio"></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <v-text-field v-model="internCod" label="Forma de Pagamento"></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <div>
-                    <div class="subheading">Selecione a data</div>
-                    <v-date-picker
-                      v-model="date2"
-                      :event-color="date => date[9] % 2 ? 'red' : 'yellow'"
-                      :events="functionEvents"
-                    ></v-date-picker>
-                  </div>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <div class="subheading">Selecione um horário</div>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="10:00"
-                    required
-                  ></v-checkbox>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="11:00"
-                    required
-                  ></v-checkbox>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="12:00"
-                    required
-                  ></v-checkbox>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <div class="subheading">Data e hora selecionada</div>
-                  <v-text-field value="22/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
-                  <v-text-field value="24/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
-                  <v-text-field value="26/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
-                </v-col>
+                  <v-col cols="12" sm="6" md="12">
+                    <v-text-field v-model="editedItem.productName" label="Forma de Pagamento"></v-text-field>
+                  </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -156,7 +99,7 @@
 </style>
 
 <script>
-import { mdiBookAccount, mdiBookPlusMultiple } from "@mdi/js";
+import { mdiCashMultiple, mdiCashPlus } from "@mdi/js";
 
 export default {
   data: () => ({
@@ -165,16 +108,12 @@ export default {
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
-      { text: "N° Cadastro", value: "numberRegistre" },
-      { text: "Responsável", value: "parents" },
-      { text: "Bebê", value: "baby" },
-      { text: "Ensaio", value: "test" },
-      { text: "Data Próximo Ensaio", value: "newTestDate" },
+      { text: "Forma de Pagamento", value: "payment" },
       { text: "Ações", value: "actions", sortable: false },
     ],
     icons: {
-      icon: mdiBookAccount,
-      iconAdd: mdiBookPlusMultiple,
+      icon: mdiCashMultiple,
+      iconAdd: mdiCashPlus,
     },
     products: [],
     editedIndex: -1,
@@ -232,32 +171,16 @@ export default {
     initialize() {
       this.products = [
         {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
+          payment: "Cartão de Crédito",
         },
         {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
+          payment: "Cartão de Débito",
         },
         {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
+          payment: "Dinheiro",
         },
         {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
+          payment: "PicPay",
         },
       ];
     },

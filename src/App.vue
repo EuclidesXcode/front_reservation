@@ -66,6 +66,7 @@ import {
   mdiAccount,
   mdiBookAccount,
   mdiAccountGroup,
+  mdiCog 
 } from "@mdi/js";
 export default {
   props: {
@@ -78,6 +79,7 @@ export default {
       { title: "Agenda", icon: mdiBookAccount, link: "/reservation" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
+      { title: "Configurações", icon: mdiCog , link: "/config" },
     ],
     drawer: null,
     ChangeTheme: false,
