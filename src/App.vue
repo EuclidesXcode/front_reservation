@@ -11,7 +11,7 @@
 
           <v-list-item-content>
             <v-list-item-title>Euclides Nascimento</v-list-item-title>
-            <v-list-item-subtitle>Recepcionista</v-list-item-subtitle>
+            <v-list-item-subtitle>Gerente</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
@@ -56,7 +56,7 @@
       <span>myMarket &copy; 2020</span>
 
       <v-spacer></v-spacer>
-      <div>Data: 09/06/2020 | 10:36:22</div>
+      <div>Data: {{timestamp}}</div>
     </v-footer>
   </v-app>
 </template>
@@ -67,15 +67,15 @@ import {
   mdiLayers,
   mdiAccountGroup,
 } from "@mdi/js";
-
 export default {
   props: {
     source: String
   },
   data: () => ({
+    timestamp: '',
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
-      { title: "Agenda", icon: mdiLayers, link: "/products" },
+      { title: "Agenda", icon: mdiLayers, link: "/reservation" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
     ],
@@ -86,9 +86,18 @@ export default {
   }),
   created() {
     this.$vuetify.theme.dark = this.ChangeTheme;
+    setInterval(this.setTime, 1000);
   },
-  computed: {},
+  computed: {
+  },
   methods: {
+   setTime: function() {
+    const today = new Date();
+    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    const dateTime = date +' '+ time;
+    this.timestamp = dateTime;
+   },
     chengeTheme() {
       if (this.ChangeTheme === false) {
         this.$vuetify.theme.dark = true;
