@@ -53,7 +53,7 @@
     </v-content>
 
     <v-footer app>
-      <span>myMarket &copy; 2020</span>
+      <span>NewBorn RJ &copy; 2020</span>
 
       <v-spacer></v-spacer>
       <div>Data: {{timestamp}}</div>
