@@ -64,7 +64,7 @@
 <script>
 import {
   mdiAccount,
-  mdiLayers,
+  mdiBookAccount,
   mdiAccountGroup,
 } from "@mdi/js";
 export default {
@@ -75,7 +75,7 @@ export default {
     timestamp: '',
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
-      { title: "Agenda", icon: mdiLayers, link: "/reservation" },
+      { title: "Agenda", icon: mdiBookAccount, link: "/reservation" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
     ],

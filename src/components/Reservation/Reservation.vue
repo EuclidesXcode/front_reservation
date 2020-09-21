@@ -1,9 +1,5 @@
 <template>
   <v-card color="basil">
-    <v-card-title class="text-center justify-center py-6">
-      <h1 class="font-weight-bold display-3 basil--text">Produtos</h1>
-    </v-card-title>
-
     <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
       <v-tab v-for="item in items" :key="item">{{ item.title }} <v-icon id="titleIcon">{{ item.icon }}</v-icon></v-tab>
     </v-tabs>
@@ -36,27 +32,21 @@
 </style>
 
 <script>
-import SrcProducts from "./SrcProducts";
-import PromProducts from "./PromProducts";
-import StockProducts from "./StockProducts";
+import Schedules from "./Schedules";
 import {
-  mdiLayers,
-  mdiPercentOutline,
-  mdiPackageVariantClosed 
+  mdiBookAccount,
 } from "@mdi/js";
 
 export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
-    SrcProducts: SrcProducts
+    Schedules: Schedules
   },
   data() {
     return {
       tab: null,
       items: [
-        { title: "Produtos", component: SrcProducts, icon: mdiLayers },
-        { title: "promoções", component: PromProducts, icon: mdiPercentOutline  },
-        { title: "estoque", component: StockProducts, icon: mdiPackageVariantClosed  }
+        { title: "Agendamentos", component: Schedules, icon: mdiBookAccount },
       ]
     };
   }

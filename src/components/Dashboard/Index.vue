@@ -1,7 +1,7 @@
 <template>
   <v-card color="basil">
     <v-card-title class="text-center justify-center py-6">
-      <h1 class="font-weight-bold display-3 basil--text">Vendas</h1>
+      <h1 class="font-weight-bold display-3 basil--text">Agendamentos</h1>
     </v-card-title>
 
     <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
@@ -23,32 +23,34 @@
 .basil--text {
   color: #0e6dcc !important;
 }
+
+#component {
+  padding: 15px;
+}
 #titleIcon {
   margin-left: 7px;
 }
-#component {
-  padding: 15px;
+.btn-form {
+  margin-right: 15px;
 }
 </style>
 
 <script>
-import ListSales from './ListSales'
-import SrcSales from './SrcSales'
+import Dashboard from './Dashboard';
 import {
-  mdiCartArrowDown,
-  mdiMagnify    
-} from '@mdi/js'
+  mdiBookAccount,
+} from "@mdi/js";
 
 export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
+    Dashboard: Dashboard
   },
   data() {
     return {
       tab: null,
       items: [
-        { title: "Últimas vendas", component: ListSales, icon: mdiCartArrowDown },
-        { title: "Consultar Vendas", component: SrcSales , icon: mdiMagnify }
+        { title: "Agenda completa", component: Dashboard, icon: mdiBookAccount }
       ]
     };
   }

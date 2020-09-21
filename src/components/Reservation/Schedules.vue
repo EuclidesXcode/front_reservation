@@ -34,13 +34,13 @@
     </template>
 
     <v-card-title>
-      Produtos
+      Agendamentos
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
-        label="Consulte produtos por código de barras, código interno ou nome..."
+        label="Consulte agendamentos por N° de cadastro ou responsável..."
       ></v-text-field>
     </v-card-title>
 
@@ -70,62 +70,65 @@
         </template>
         <v-card>
           <v-card-title>
-            <span class="headline">Novo Produto</span>
+            <span class="headline">Novo Agendamento</span>
             <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
           </v-card-title>
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="barCod" label="Código de Barras"></v-text-field>
+                <v-col cols="12" md="4">
+                  <v-text-field v-model="barCod" label="Selecione o Cliente"></v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="internCod" label="Código Interno"></v-text-field>
+                <v-col cols="12" md="4">
+                  <v-text-field v-model="internCod" label="Selecione o Ensaio"></v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="productName" label="Descrição do Produto"></v-text-field>
+                <v-col cols="12" md="4">
+                  <v-text-field v-model="internCod" label="Forma de Pagamento"></v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="minProductName" label="Descrição Resumida"></v-text-field>
+                <v-col cols="12" md="4">
+                  <div>
+                    <div class="subheading">Selecione a data</div>
+                    <v-date-picker
+                      v-model="date2"
+                      :event-color="date => date[9] % 2 ? 'red' : 'yellow'"
+                      :events="functionEvents"
+                    ></v-date-picker>
+                  </div>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-select :items="provider" label="Fornecedor"></v-select>
+                <v-col cols="12" md="4">
+                  <div class="subheading">Selecione um horário</div>
+                  <v-checkbox
+                    v-model="checkbox"
+                    :rules="[v => !!v || 'You must agree to continue!']"
+                    label="10:00"
+                    required
+                  ></v-checkbox>
+                  <v-checkbox
+                    v-model="checkbox"
+                    :rules="[v => !!v || 'You must agree to continue!']"
+                    label="11:00"
+                    required
+                  ></v-checkbox>
+                  <v-checkbox
+                    v-model="checkbox"
+                    :rules="[v => !!v || 'You must agree to continue!']"
+                    label="12:00"
+                    required
+                  ></v-checkbox>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-select :items="groupProducts" label="Grupo do Produto"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="subGroupProducts" label="Sub-grupo do Produto"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="und" label="Unidade de medida"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="ncm" label="NCM"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="cest" label="CEST"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="cfop" label="CFOP"></v-select>
-                </v-col>
-
-                <v-col cols="12" md="3">
-                  <v-select :items="icms" label="Situação Tributária ICMS"></v-select>
+                <v-col cols="12" md="4">
+                  <div class="subheading">Data e hora selecionada</div>
+                  <v-text-field value="22/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
+                  <v-text-field value="24/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
+                  <v-text-field value="26/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
-            <small>* Preenchimento obrigatório</small>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -153,21 +156,25 @@
 </style>
 
 <script>
-import { mdiLayers, mdiLayersPlus } from "@mdi/js";
+import { mdiBookAccount, mdiBookPlusMultiple } from "@mdi/js";
 
 export default {
   data: () => ({
     dialog: false,
+    arrayEvents: null,
+    date1: new Date().toISOString().substr(0, 10),
+    date2: new Date().toISOString().substr(0, 10),
     headers: [
-      { text: "EAN-13", value: "ean" },
-      { text: "Produto", value: "productName" },
-      { text: "Estoque", value: "quant" },
-      { text: "Preço", value: "price" },
-      { text: "Ações", value: "actions", sortable: false }
+      { text: "N° Cadastro", value: "numberRegistre" },
+      { text: "Responsável", value: "parents" },
+      { text: "Bebê", value: "baby" },
+      { text: "Ensaio", value: "test" },
+      { text: "Data Próximo Ensaio", value: "newTestDate" },
+      { text: "Ações", value: "actions", sortable: false },
     ],
     icons: {
-      icon: mdiLayers,
-      iconAdd: mdiLayersPlus
+      icon: mdiBookAccount,
+      iconAdd: mdiBookPlusMultiple,
     },
     products: [],
     editedIndex: -1,
@@ -175,13 +182,13 @@ export default {
       productName: "",
       ean: 0,
       quant: 0,
-      price: ""
+      price: "",
     },
     defaultItem: {
       productName: "",
       ean: 0,
       quant: 0,
-      price: ""
+      price: "",
     },
     valid: false,
     firstname: "",
@@ -195,9 +202,9 @@ export default {
     cfop: ["1.000", "1.100", "1.101", "1.102"],
     icms: ["ISENTO"],
     emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+/.test(v) || "E-mail must be valid"
-    ]
+      (v) => !!v || "E-mail is required",
+      (v) => /.+@.+/.test(v) || "E-mail must be valid",
+    ],
   }),
 
   computed: {},
@@ -205,53 +212,40 @@ export default {
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
 
   created() {
     this.initialize();
   },
 
+  mounted() {
+    this.arrayEvents = [...Array(6)].map(() => {
+      const day = Math.floor(Math.random() * 30);
+      const d = new Date();
+      d.setDate(day);
+      return d.toISOString().substr(0, 10);
+    });
+  },
+
   methods: {
     initialize() {
       this.products = [
         {
-          productName: "Coca-Cola 2LT",
-          ean: 789564656163,
-          quant: 15,
-          price: "R$ 6,99"
+          numberRegistre: "001",
+          parents: "Euclides Silva",
+          baby: "Joaquim Silva",
+          test: "Ensaio NewBorn",
+          newTestDate: "29/09/2020 - 10:30",
         },
-        {
-          productName: "Guaraná Kuat 2LT",
-          ean: 789564656547,
-          quant: 5,
-          price: "R$ 4,99"
-        },
-        {
-          productName: "Suco Tang Uva UND",
-          ean: 789564634444,
-          quant: 350,
-          price: "R$ 0,99"
-        },
-        {
-          productName: "Suco del valle 250ml",
-          ean: 789564656163,
-          quant: 32,
-          price: "R$ 2,69"
-        },
-        {
-          productName: "Suco Laranja Del Valle Fresh 200ml",
-          ean: 789564621555,
-          quant: 22,
-          price: "R$ 1,29"
-        },
-        {
-          productName: "Mineirinho 2LT",
-          ean: 789564656222,
-          quant: 12,
-          price: "R$ 3,99"
-        }
       ];
+    },
+
+    functionEvents(date) {
+      const [, , day] = date.split("-");
+      if ([12, 17, 28].includes(parseInt(day, 10))) return true;
+      if ([1, 19, 22].includes(parseInt(day, 10))) return ["red", "#00f"];
+      return false;
     },
 
     getColor(quant) {
@@ -287,7 +281,7 @@ export default {
         this.products.push(this.editedItem);
       }
       this.close();
-    }
-  }
+    },
+  },
 };
 </script>
