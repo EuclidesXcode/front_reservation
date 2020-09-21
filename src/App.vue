@@ -11,7 +11,7 @@
 
           <v-list-item-content>
             <v-list-item-title>Euclides Nascimento</v-list-item-title>
-            <v-list-item-subtitle>Gerente Adm</v-list-item-subtitle>
+            <v-list-item-subtitle>Recepcionista</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
@@ -30,7 +30,7 @@
 
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>myMarket</v-toolbar-title>
+      <v-toolbar-title>NewBorn RJ</v-toolbar-title>
 
       <v-spacer></v-spacer>
       <v-text-field style="margin-top: 5px;" color="info" loading label="Buscar..."></v-text-field>
@@ -65,12 +65,7 @@
 import {
   mdiAccount,
   mdiLayers,
-  mdiAccountTie,
-  mdiCashUsdOutline,
-  mdiChartAreaspline,
   mdiAccountGroup,
-  mdiFileChart,
-  mdiFileMultiple
 } from "@mdi/js";
 
 export default {
@@ -80,15 +75,9 @@ export default {
   data: () => ({
     items: [
       { title: "Dashboard", icon: "mdi-view-dashboard", link: "/" },
-      { title: "Produtos", icon: mdiLayers, link: "/products" },
-      { title: "Notas Fiscais", icon: mdiFileMultiple, link: "/imports" },
-      { title: "Pessoas", icon: mdiAccountGroup, link: "/people" },
-      { title: "Vendas", icon: mdiChartAreaspline, link: "/sales" },
-      { title: "Financeiro", icon: mdiCashUsdOutline, link: "/financial" },
-      { title: "Relatórios", icon: mdiFileChart, link: "/report" },
+      { title: "Agenda", icon: mdiLayers, link: "/products" },
+      { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
-      { title: "Área Administrativa", icon: mdiAccountTie, link: "/admin" },
-      { title: "Configurações", icon: "mdi-cog", link: "/config" }
     ],
     drawer: null,
     ChangeTheme: false,
