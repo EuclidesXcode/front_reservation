@@ -5,13 +5,13 @@
         <v-list-item two-line :class="miniVariant && 'px-0'">
           <v-list-item-avatar>
             <img
-              src="https://image.flaticon.com/icons/png/512/206/206853.png"
+              src="https://baralhospizzaria.com.br/assets/imagens/logo.jpeg"
             />
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title>Euclides Nascimento</v-list-item-title>
-            <v-list-item-subtitle>Gerente</v-list-item-subtitle>
+            <v-list-item-title>NewBorn Rj</v-list-item-title>
+            <v-list-item-subtitle>Usuário(a): Euclides</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 
