@@ -1,8 +1,5 @@
 <template>
   <v-card color="basil">
-    <v-card-title class="text-center justify-center py-6">
-      <h1 class="font-weight-bold display-3 basil--text">Agendamentos</h1>
-    </v-card-title>
 
     <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
       <v-tab v-for="item in items" :key="item">{{ item.title }} <v-icon id="titleIcon">{{ item.icon }}</v-icon></v-tab>
@@ -23,7 +20,6 @@
 .basil--text {
   color: #0e6dcc !important;
 }
-
 #component {
   padding: 15px;
 }
