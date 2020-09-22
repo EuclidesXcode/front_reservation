@@ -7,13 +7,13 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                <v-col cols="12" md="6">
-                  <v-text-field v-model="internCod" label="Nome do Ensaio"></v-text-field>
-                </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field v-model="internCod" label="Nome do Ensaio"></v-text-field>
+                  </v-col>
 
-                <v-col cols="12" md="6">
-                  <v-text-field v-model="internCod" label="Preço"></v-text-field>
-                </v-col>
+                  <v-col cols="12" md="6">
+                    <v-text-field v-model="internCod" label="Preço"></v-text-field>
+                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -32,25 +32,31 @@
       Ensaios
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
       <v-spacer></v-spacer>
-      <v-text-field
-        v-model="search"
-        append-icon="mdi-magnify"
-        label="Consulte ensaios por Nome"
-      ></v-text-field>
+      <v-text-field v-model="search" append-icon="mdi-magnify" label="Consulte ensaios por Nome"></v-text-field>
     </v-card-title>
 
-    <v-data-table :headers="headers" :items="products" sort-by="quant" class="elevation-1">
-      <template v-slot:item.quant="{ item }">
-        <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
-    </v-data-table>
+    <v-tabs horizontal>
+      <v-tab left>
+        <v-icon left>{{ icons.icon }}</v-icon>Dados do Ensaio
+      </v-tab>
+
+      <v-tab-item>
+        <v-card flat>
+          <v-data-table :headers="headers" :items="products" sort-by="quant" class="elevation-1">
+            <template v-slot:item.quant="{ item }">
+              <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+            <template v-slot:no-data>
+              <v-btn color="primary" @click="initialize">Reset</v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
 
     <!-- modal -->
 
@@ -107,7 +113,7 @@
 </style>
 
 <script>
-import { mdiMovieOpen, mdiMovieEdit} from "@mdi/js";
+import { mdiMovieOpen, mdiMovieEdit } from "@mdi/js";
 
 export default {
   data: () => ({
@@ -121,8 +127,8 @@ export default {
       { text: "Ações", value: "actions", sortable: false },
     ],
     icons: {
-      icon: mdiMovieOpen ,
-      iconAdd: mdiMovieEdit
+      icon: mdiMovieOpen,
+      iconAdd: mdiMovieEdit,
     },
     products: [],
     editedIndex: -1,

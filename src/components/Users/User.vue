@@ -47,18 +47,28 @@
       ></v-text-field>
     </v-card-title>
 
-    <v-data-table :headers="headers" :items="provider" sort-by="quant" class="elevation-1">
-      <template v-slot:item.quant="{ item }">
-        <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-        <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-      </template>
-      <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize">Reset</v-btn>
-      </template>
-    </v-data-table>
+    <v-tabs horizontal>
+      <v-tab left>
+        <v-icon left>{{ icons.icon }}</v-icon>Dados do Cliente
+      </v-tab>
+
+      <v-tab-item>
+        <v-card flat>
+          <v-data-table :headers="headers" :items="provider" sort-by="quant" class="elevation-1">
+            <template v-slot:item.quant="{ item }">
+              <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
+            </template>
+            <template v-slot:no-data>
+              <v-btn color="primary" @click="initialize">Reset</v-btn>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-tab-item>
+    </v-tabs>
 
     <!-- modal -->
 
