@@ -152,20 +152,6 @@ export default {
       icon: mdiAccountMultiple,
       iconAdd: mdiAccountMultiplePlus,
     },
-    provider: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      cpf: "",
-      profile: "",
-      password: "",
-    },
-    defaultItem: {
-      name: "",
-      cpf: "",
-      profile: "",
-      password: "",
-    },
   }),
 
   computed: {},

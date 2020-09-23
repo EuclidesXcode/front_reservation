@@ -193,25 +193,6 @@ export default {
       iconAdd: mdiAccountPlus,
       iconUserAccount: mdiAccountGroup
     },
-    physicPerson: [],
-    legalPerson: [],
-    editedIndex: -1,
-    editedItem: {
-      name: "",
-      cpf: "",
-      address: "",
-      complement: "",
-      city: "",
-      phone: ""
-    },
-    defaultItem: {
-      name: "",
-      cpf: "",
-      address: "",
-      complement: "",
-      city: "",
-      phone: ""
-    }
   }),
 
   computed: {},
