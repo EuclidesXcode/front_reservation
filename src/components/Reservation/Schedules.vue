@@ -87,15 +87,15 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="4">
-                  <v-text-field v-model="barCod" label="Selecione o Cliente"></v-text-field>
+                  <v-select :items="clientes" label="Selecione o Cliente"></v-select>
                 </v-col>
 
                 <v-col cols="12" md="4">
-                  <v-text-field v-model="internCod" label="Selecione o Ensaio"></v-text-field>
+                  <v-select :items="ensaios" label="Selecione o Ensaio"></v-select>
                 </v-col>
 
                 <v-col cols="12" md="4">
-                  <v-text-field v-model="internCod" label="Forma de Pagamento"></v-text-field>
+                  <v-select :items="pagamento" label="Forma de Pagamento"></v-select>
                 </v-col>
 
                 <v-col cols="12" md="4">
@@ -186,6 +186,25 @@ export default {
       icon: mdiBookAccount,
       iconAdd: mdiBookPlusMultiple,
     },
+    clientes: [
+      "Cliente 1",
+      "Cliente 2",
+      "Cliente 3",
+      "Cliente 4"
+    ],
+    ensaios: [
+      "Ensaio 1",
+      "Ensaio 2",
+      "Ensaio 3",
+      "Ensaio 4"
+    ],
+    pagamento: [
+      "Pagamento 1",
+      "Pagamento 2",
+      "Pagamento 3",
+      "Pagamento 4"
+    ],
+
   }),
 
   computed: {},
