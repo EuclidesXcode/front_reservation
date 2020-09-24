@@ -36,6 +36,14 @@
     <v-card-title>
       Agendamentos
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
+
+      <v-snackbar v-model="snackbar" top="top">
+        {{ text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="green" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+        </template>
+      </v-snackbar>
+
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -142,7 +150,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" text @click="dialog = false" dark>
+            <v-btn class="ma-2" color="primary" text @click="dialog = false, snackbar = true" dark>
               Salvar
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
@@ -170,6 +178,8 @@ import { mdiBookAccount, mdiBookPlusMultiple } from "@mdi/js";
 
 export default {
   data: () => ({
+    snackbar: false,
+    text: "Agendamento cadastrado com sucesso!",
     dialog: false,
     arrayEvents: null,
     date1: new Date().toISOString().substr(0, 10),
@@ -186,25 +196,9 @@ export default {
       icon: mdiBookAccount,
       iconAdd: mdiBookPlusMultiple,
     },
-    clientes: [
-      "Cliente 1",
-      "Cliente 2",
-      "Cliente 3",
-      "Cliente 4"
-    ],
-    ensaios: [
-      "Ensaio 1",
-      "Ensaio 2",
-      "Ensaio 3",
-      "Ensaio 4"
-    ],
-    pagamento: [
-      "Pagamento 1",
-      "Pagamento 2",
-      "Pagamento 3",
-      "Pagamento 4"
-    ],
-
+    clientes: ["Cliente 1", "Cliente 2", "Cliente 3", "Cliente 4"],
+    ensaios: ["Ensaio 1", "Ensaio 2", "Ensaio 3", "Ensaio 4"],
+    pagamento: ["Pagamento 1", "Pagamento 2", "Pagamento 3", "Pagamento 4"],
   }),
 
   computed: {},
