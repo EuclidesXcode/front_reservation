@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Login from '../components/Login/Login.vue'
 import Dashboard from '../components/Dashboard/Index.vue'
 import Config from '../components/Config/Index.vue'
 import Reservation from '../components/Reservation/Reservation.vue'
@@ -13,6 +14,10 @@ const router = new Router({
   routes: [
     {
       path: '/',
+      component: Login
+    },
+    {
+      path: '/dashboard',
       component: Dashboard
     },
     {

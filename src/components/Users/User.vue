@@ -8,19 +8,37 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" md="3">
-                    <v-text-field v-model="firsstName" label="Nome *"></v-text-field>
+                    <v-text-field
+                      v-model="firsstName"
+                      label="Nome *"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col cols="12" md="3">
-                    <v-text-field v-model="secondName" label="Sobre-nome *"></v-text-field>
+                    <v-text-field
+                      v-model="secondName"
+                      label="Sobre-nome *"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col cols="12" md="3">
-                    <v-text-field v-model="email" label="E-mail *"></v-text-field>
+                    <v-text-field
+                      v-model="email"
+                      label="E-mail *"
+                    ></v-text-field>
                   </v-col>
 
                   <v-col cols="12" md="3">
-                    <v-text-field v-model="password" label="Senha *"></v-text-field>
+                    <v-text-field
+                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                      :rules="[rules.required, rules.min]"
+                      :type="showPass ? 'text' : 'password'"
+                      v-model="password"
+                      label="Senha *"
+                      hint="At least 8 characters"
+                      counter
+                      @click:append="show1 = !show1"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -39,6 +57,15 @@
     <v-card-title>
       Usuários
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
+
+      <v-snackbar v-model="snackbar" top="top">
+        {{ msg }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="green" text v-bind="attrs" @click="snackbar = false"
+            >Close</v-btn
+          >
+        </template>
+      </v-snackbar>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -49,17 +76,27 @@
 
     <v-tabs horizontal>
       <v-tab left>
-        <v-icon left>{{ icons.icon }}</v-icon>Dados do Cliente
+        <v-icon left>{{ icons.icon }}</v-icon
+        >Dados do Cliente
       </v-tab>
 
       <v-tab-item>
         <v-card flat>
-          <v-data-table :headers="headers" :items="provider" sort-by="quant" class="elevation-1">
+          <v-data-table
+            :headers="headers"
+            :items="provider"
+            sort-by="quant"
+            class="elevation-1"
+          >
             <template v-slot:item.quant="{ item }">
-              <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
+              <v-chip :color="getColor(item.quant)" dark>{{
+                item.quant
+              }}</v-chip>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon small class="mr-2" @click="editItem(item)"
+                >mdi-pencil</v-icon
+              >
               <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:no-data>
@@ -90,11 +127,17 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="firsstName" label="Nome *"></v-text-field>
+                  <v-text-field
+                    v-model="firsstName"
+                    label="Nome *"
+                  ></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="secondName" label="Sobre-nome *"></v-text-field>
+                  <v-text-field
+                    v-model="secondName"
+                    label="Sobre-nome *"
+                  ></v-text-field>
                 </v-col>
 
                 <v-col cols="12" md="3">
@@ -102,7 +145,16 @@
                 </v-col>
 
                 <v-col cols="12" md="3">
-                  <v-text-field v-model="password" label="Senha *"></v-text-field>
+                  <v-text-field
+                    :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+                    :rules="[rules.required, rules.min]"
+                    :type="showPass ? 'text' : 'password'"
+                    v-model="password"
+                    label="Senha *"
+                    hint="At least 8 characters"
+                    counter
+                    @click:append="showPass = !showPass"
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -110,7 +162,13 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" text @click="dialog = false" dark>
+            <v-btn
+              class="ma-2"
+              color="primary"
+              text
+              @click="hendleSubmit()"
+              dark
+            >
               Salvar
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
@@ -139,15 +197,31 @@
 <script>
 import { mdiAccountMultiple } from "@mdi/js";
 import { mdiAccountMultiplePlus } from "@mdi/js";
+import api from "../../config/api";
 
 export default {
   data: () => ({
+    snackbar: false,
+    search: "",
+    msg: "",
+    showPass: false,
+    password: "",
+    rules: {
+      required: (value) => !!value || "Required.",
+      min: (v) => v.length >= 8 || "Min 8 characters",
+      emailMatch: () => "The email and password you entered don't match",
+    },
+    firsstName: "",
+    secondName: "",
+    name: "",
+    email: "",
     dialog: false,
     headers: [
       { text: "Nome", value: "name" },
       { text: "E-mail", value: "email" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    provider: [],
     icons: {
       icon: mdiAccountMultiple,
       iconAdd: mdiAccountMultiplePlus,
@@ -156,63 +230,55 @@ export default {
 
   computed: {},
 
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
-  },
-
   created() {
     this.initialize();
   },
 
   methods: {
     initialize() {
-      this.provider = [
-        {
-          name: "Euclides Nascimento",
-          email: "euclideslione@icloud.com",
-        },
-        {
-          name: "Suelen Monteiro",
-          email: "suelen.monteiro@icloud.com",
-        },
-      ];
+      const getUser = async () => {
+        await api
+          .get("/user", {noLimit:true}, {
+          })
+          .then((res) => {
+            console.log("res da api: ", res.data);
+            this.provider = res.data.items;
+          })
+          .catch((error) => {
+            console.log("Error da api: ", error.response.data);
+          });
+      };
+      return getUser();
     },
 
-    getColor(quant) {
-      if (quant < 10) return "red";
-      else if (quant < 20) return "orange";
-      else return "green";
-    },
+    hendleSubmit() {
+      this.name = this.firsstName + " " + this.secondName;
+      console.log("chamou, e o nome do infeliz é: ");
 
-    editItem(item) {
-      this.editedIndex = this.provider.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
+      const sendUser = async () => {
+        await api
+          .post("/user", {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+          })
+          .then((res) => {
+            console.log("res da api: ", res.data.items);
+            const items = res.data.items;
+            this.email = items.email;
+            this.msg = items.msg;
+            this.dialog = false;
+            this.snackbar = true;
+          })
+          .catch((error) => {
+            console.log("Error da api: ", error.response.data);
+            this.msg = error.response.data;
+            this.dialog = false;
+            this.snackbar = true;
+          });
+      };
 
-    deleteItem(item) {
-      const index = this.provider.indexOf(item);
-      confirm("Certeza que deseja deletar o Fornecedor?") &&
-        this.provider.splice(index, 1);
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
-      });
-    },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.provider[this.editedIndex], this.editedItem);
-      } else {
-        this.provider.push(this.editedItem);
-      }
-      this.close();
+      return sendUser();
     },
   },
 };

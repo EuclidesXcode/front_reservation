@@ -2,7 +2,7 @@
   <v-app id="inspire">
     <v-navigation-drawer v-model="drawer" app clipped>
       <v-list dense>
-        <v-list-item two-line :class="miniVariant && 'px-0'">
+        <v-list-item two-line class="miniVariant && 'px-0'">
           <v-list-item-avatar>
             <img
               src="https://baralhospizzaria.com.br/assets/imagens/logo.jpeg"
