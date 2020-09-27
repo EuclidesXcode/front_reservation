@@ -1,4 +1,4 @@
 export default {
     login: null,
-    error: null
+    errorPass: false
 }

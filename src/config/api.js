@@ -1,9 +1,10 @@
-const axios = require('axios');
+import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: 'https://back-newborn.herokuapp.com',
     headers: {
-        'content-type': 'multpart-formdata'
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
     }
 });
 

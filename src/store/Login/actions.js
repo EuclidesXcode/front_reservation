@@ -2,7 +2,7 @@ import Vue from 'vue';
 import api from '../../config/api';
 
 export default {
-    async Login({commit}, payload){
+    async login({commit}, payload){
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/auth', payload);
@@ -11,9 +11,11 @@ export default {
             api.defaults.headers.common.Authorization = `Bears ${localStorage.TOKEN}`;
             commit('SET_LOGIN', decodedToken);
 
+            console.log("token meu ovo: ", localStorage.TOKEN, decodedToken);
         }
         catch(error) {
-            commit('SET_ERROR', error.respomse.data.msg);
+            console.log("error do catch: ", error.response.data);
+            commit('SET_ERROR', error.response.data);
         }
     }
 }

@@ -13,28 +13,46 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
-      component: Login
+      path: '/login',
+      component: Login,
+      meta: {
+        showMenu: false
+      }
     },
     {
       path: '/dashboard',
-      component: Dashboard
+      component: Dashboard,
+      meta: {
+        showMenu: true
+      }
     },
     {
       path: '/reservation',
-      component: Reservation
+      component: Reservation,
+      meta: {
+        showMenu: true
+      }
     },
     {
       path: '/people',
-      component: People
+      component: People,
+      meta: {
+        showMenu: true
+      }
     },
     {
       path: '/users',
-      component: Users
+      component: Users,
+      meta: {
+        showMenu: true
+      }
     },
     {
       path: '/config',
-      component: Config
+      component: Config,
+      meta: {
+        showMenu: true
+      }
     },
   ]
 });

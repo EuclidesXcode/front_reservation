@@ -1,6 +1,6 @@
 export default {
-    getterError(state) {
-        return state.error;
+    getErrorPass(state) {
+        return state.errorPass;
     },
     getLogin(state) {
         return state.login;
