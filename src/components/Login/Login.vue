@@ -11,7 +11,6 @@
       </v-snackbar>
     </v-col>
     <v-col md="12" class="mt-12"> </v-col>
-    <v-col md="12" class="mt-12"> </v-col>
 
     <v-col md="12" class="mt-12">
       <v-card
@@ -35,6 +34,12 @@
                 @click:append="showPass = !showPass"
               ></v-text-field>
               <v-btn class="mr-4" @click="hendleLogin()">Login</v-btn>
+
+              <v-progress-circular
+                :size="30"
+                color="primary"
+                :indeterminate="laoding"
+              ></v-progress-circular>
             </v-col>
           </form>
         </v-card-text>
@@ -75,10 +80,11 @@
 </style>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    laoding: false,
     msg: "E-mail e/ou senha inválidos!",
     snackbar: false,
     email: "",
@@ -99,11 +105,14 @@ export default {
     initialize() {},
 
     async hendleLogin() {
+      this.laoding = true;
       await this.login({ email: this.email, password: this.password });
       if (!this.errorPass) {
         this.$router.push("/dashboard");
+        this.laoding = false;
       } else {
         this.snackbar = true;
+        this.laoding = false;
       }
     },
   },

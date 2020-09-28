@@ -263,6 +263,7 @@ export default {
         this.snackbar = true;
       } else {
         await this.initialize();
+        console.log("error clients: ", this.error)
         this.dialog = false;
         this.msg = "Cliente já cadastrado!";
         this.snackbar = true;

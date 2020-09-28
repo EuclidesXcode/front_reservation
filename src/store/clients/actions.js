@@ -4,7 +4,7 @@ export default {
     async createClient({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            await api.post('/clients', payload);
+            await api.post('/clients/createClient', payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
