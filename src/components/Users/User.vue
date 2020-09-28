@@ -1,59 +1,5 @@
 <template>
   <v-card>
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-dialog v-model="dialog" max-width="500px">
-          <v-card>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="firsstName"
-                      label="Nome *"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="secondName"
-                      label="Sobre-nome *"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      v-model="email"
-                      label="E-mail *"
-                    ></v-text-field>
-                  </v-col>
-
-                  <v-col cols="12" md="3">
-                    <v-text-field
-                      :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                      :rules="[rules.required, rules.min]"
-                      :type="showPass ? 'text' : 'password'"
-                      v-model="password"
-                      label="Senha *"
-                      hint="At least 8 characters"
-                      counter
-                      @click:append="show1 = !show1"
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
     <v-card-title>
       Usuários
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
