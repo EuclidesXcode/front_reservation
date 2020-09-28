@@ -61,7 +61,7 @@
       <v-snackbar v-model="snackbar" top="top">
         {{ msg }}
         <template v-slot:action="{ attrs }">
-          <v-btn color="green" text v-bind="attrs" @click="snackbar = false"
+          <v-btn color="red" text v-bind="attrs" @click="snackbar = false"
             >Close</v-btn
           >
         </template>
@@ -84,7 +84,7 @@
         <v-card flat>
           <v-data-table
             :headers="headers"
-            :items="provider"
+            :items="users"
             sort-by="quant"
             class="elevation-1"
           >
@@ -126,30 +126,23 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <v-text-field
-                    v-model="firsstName"
-                    label="Nome *"
+                    v-model="newUser.name"
+                    label="Nome*"
                   ></v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-text-field
-                    v-model="secondName"
-                    label="Sobre-nome *"
-                  ></v-text-field>
+                <v-col cols="12" md="4">
+                  <v-text-field v-model="newUser.email" label="E-mail *"></v-text-field>
                 </v-col>
 
-                <v-col cols="12" md="3">
-                  <v-text-field v-model="email" label="E-mail *"></v-text-field>
-                </v-col>
-
-                <v-col cols="12" md="3">
+                <v-col cols="12" md="4">
                   <v-text-field
                     :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
                     :rules="[rules.required, rules.min]"
                     :type="showPass ? 'text' : 'password'"
-                    v-model="password"
+                    v-model="newUser.password"
                     label="Senha *"
                     hint="At least 8 characters"
                     counter
@@ -195,9 +188,9 @@
 </style>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { mdiAccountMultiple } from "@mdi/js";
 import { mdiAccountMultiplePlus } from "@mdi/js";
-import api from "../../config/api";
 
 export default {
   data: () => ({
@@ -221,65 +214,63 @@ export default {
       { text: "E-mail", value: "email" },
       { text: "Ações", value: "actions", sortable: false },
     ],
-    provider: [],
+    newUser: {},
+    users: [],
     icons: {
       icon: mdiAccountMultiple,
       iconAdd: mdiAccountMultiplePlus,
     },
   }),
 
-  computed: {},
+  computed: {
+    ...mapGetters({
+      error: "User/getError",
+      dataTable: "User/getUser"
+    }),
+  },
 
-  created() {
-    this.initialize();
+  async created() {
+    await this.initialize();
   },
 
   methods: {
-    initialize() {
-      const getUser = async () => {
-        await api
-          .get("/user", {noLimit:true}, {
-          })
-          .then((res) => {
-            console.log("res da api: ", res.data);
-            this.provider = res.data.items;
-          })
-          .catch((error) => {
-            console.log("Error da api: ", error.response.data);
-          });
-      };
-      return getUser();
+    ...mapActions({
+      getUser: "User/getUser",
+      createUser: "User/createUser",
+      deleteUser: "User/deleteUser"
+    }),
+    async initialize() {
+      await this.getUser({
+        page: 1,
+        noLimit: true
+      });
+      this.users = this.dataTable;
+      console.log("datatable: ", this.dataTable);
     },
 
-    hendleSubmit() {
-      this.name = this.firsstName + " " + this.secondName;
-      console.log("chamou, e o nome do infeliz é: ");
-
-      const sendUser = async () => {
-        await api
-          .post("/user", {
-            name: this.name,
-            email: this.email,
-            password: this.password,
-          })
-          .then((res) => {
-            console.log("res da api: ", res.data.items);
-            const items = res.data.items;
-            this.email = items.email;
-            this.msg = items.msg;
-            this.dialog = false;
-            this.snackbar = true;
-          })
-          .catch((error) => {
-            console.log("Error da api: ", error.response.data);
-            this.msg = error.response.data;
-            this.dialog = false;
-            this.snackbar = true;
-          });
-      };
-
-      return sendUser();
+    async hendleSubmit() {
+      await this.createUser(this.newUser);
+      if(!this.error) {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = 'Usuário cadastrado com sucesso!'
+        this.snackbar = true;
+       } else {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = 'Usuário já cadastrado!'
+        this.snackbar = true;
+       }
     },
+
+    async deleteItem(item){
+      await this.deleteUser(item._id);
+      if(!this.error) 
+        await this.initialize();
+        this.msg = 'Usuário detelado!'
+        this.snackbar = true;
+
+    }
   },
 };
 </script>

@@ -102,11 +102,11 @@ export default {
    },
     chengeTheme() {
       if (this.ChangeTheme === false) {
-        this.$vuetify.theme.dark = true;
-        this.theme = "Escuro";
-      } else {
         this.$vuetify.theme.dark = false;
         this.theme = "Claro";
+      } else {
+        this.$vuetify.theme.dark = true;
+        this.theme = "Escuro";
       }
     }
   }
