@@ -33,13 +33,16 @@
                 counter
                 @click:append="showPass = !showPass"
               ></v-text-field>
-              <v-btn class="mr-4" @click="hendleLogin()">Login</v-btn>
-
-              <v-progress-circular
-                :size="30"
-                color="primary"
-                :indeterminate="laoding"
-              ></v-progress-circular>
+              <v-row>
+                <v-btn class="mr-4" @click="hendleLogin()">Login</v-btn>
+                <v-spacer></v-spacer>
+                <v-progress-circular
+                  v-if="loading"
+                  :size="30"
+                  color="primary"
+                  :indeterminate="laoding"
+                ></v-progress-circular>
+              </v-row>
             </v-col>
           </form>
         </v-card-text>

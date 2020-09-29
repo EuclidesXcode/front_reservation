@@ -31,7 +31,7 @@
         <v-card flat>
           <v-data-table
             :headers="headers"
-            :items="physicPerson"
+            :items="clients"
             sort-by="status"
             class="elevation-1"
           >
@@ -210,9 +210,11 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    search: '',
     msg: "",
     dialog: false,
     snackbar: false,
+    clients: [],
     headers: [
       { text: "Nome", value: "name" },
       { text: "Bebê", value: "babyName" },
@@ -252,9 +254,12 @@ export default {
         page: 1,
         noLimit: true,
       });
+      this.clients = this.dataTable;
+      console.log("datatable: ", this.dataTable);
     },
 
     async hendleSubmit() {
+      console.log("o que eu envio: ", this.newClient);
       await this.createClient(this.newClient);
       if (!this.error) {
         await this.initialize();
