@@ -1,32 +1,19 @@
 <template>
   <v-card>
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-dialog v-model="dialog" max-width="500px">
-          <v-card>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="12">
-                    <v-text-field v-model="editedItem.productName" label="Forma de Pagamento"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Salvar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
     <v-card-title>
       Formas de Pagamento
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>
+      
+
+      <v-snackbar v-model="snackbar" top="top">
+        {{ msg }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="red" text v-bind="attrs" @click="snackbar = false"
+            >Close</v-btn
+          >
+        </template>
+      </v-snackbar>
+
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -42,7 +29,7 @@
 
       <v-tab-item>
         <v-card flat>
-          <v-data-table :headers="headers" :items="products" sort-by="quant" class="elevation-1">
+          <v-data-table :headers="headers" :items="payments" sort-by="quant" class="elevation-1">
             <template v-slot:item.quant="{ item }">
               <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
             </template>
@@ -78,14 +65,14 @@
             <v-container>
               <v-row>
                 <v-col cols="12" sm="6" md="12">
-                  <v-text-field v-model="editedItem.productName" label="Forma de Pagamento"></v-text-field>
+                  <v-text-field v-model="newPayment.name" label="Forma de Pagamento"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" text @click="dialog = false" dark>
+            <v-btn class="ma-2" color="primary" text @click="handlePayment()" dark>
               Salvar
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
@@ -109,116 +96,76 @@
 </style>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { mdiCashMultiple, mdiCashPlus } from "@mdi/js";
 
 export default {
   data: () => ({
+    snackbar: false,
+    msg: '',
+    newPayment: {},
     dialog: false,
-    arrayEvents: null,
-    date1: new Date().toISOString().substr(0, 10),
-    date2: new Date().toISOString().substr(0, 10),
     headers: [
-      { text: "Forma de Pagamento", value: "payment" },
+      { text: "Forma de Pagamento", value: "name" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    payments: [],
     icons: {
       icon: mdiCashMultiple,
       iconAdd: mdiCashPlus,
     },
-    editedItem: {
-      productName: "",
-      ean: 0,
-      quant: 0,
-      price: "",
-    },
-    defaultItem: {
-      productName: "",
-      ean: 0,
-      quant: 0,
-      price: "",
-    },
+    
   }),
 
-  computed: {},
-
-  watch: {
-    dialog(val) {
-      val || this.close();
-    },
+  computed: {
+    ...mapGetters({
+      error: "Payment/getError",
+      dataTable: "Payment/getPayment"
+    })
   },
-
-  created() {
-    this.initialize();
-  },
-
-  mounted() {
-    this.arrayEvents = [...Array(6)].map(() => {
-      const day = Math.floor(Math.random() * 30);
-      const d = new Date();
-      d.setDate(day);
-      return d.toISOString().substr(0, 10);
-    });
+  
+  async created() {
+    await this.initialize();
   },
 
   methods: {
-    initialize() {
-      this.products = [
-        {
-          payment: "Cartão de Crédito",
-        },
-        {
-          payment: "Cartão de Débito",
-        },
-        {
-          payment: "Dinheiro",
-        },
-        {
-          payment: "PicPay",
-        },
-      ];
-    },
-
-    functionEvents(date) {
-      const [, , day] = date.split("-");
-      if ([12, 17, 28].includes(parseInt(day, 10))) return true;
-      if ([1, 19, 22].includes(parseInt(day, 10))) return ["red", "#00f"];
-      return false;
-    },
-
-    getColor(quant) {
-      if (quant < 10) return "red";
-      else if (quant < 20) return "orange";
-      else return "green";
-    },
-
-    editItem(item) {
-      this.editedIndex = this.products.indexOf(item);
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-
-    deleteItem(item) {
-      const index = this.products.indexOf(item);
-      confirm("Certeza que deseja deletar o Produto?") &&
-        this.products.splice(index, 1);
-    },
-
-    close() {
-      this.dialog = false;
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem);
-        this.editedIndex = -1;
+    ...mapActions({
+      getPayment: "Payment/getPayment",
+      createPayment: "Payment/createPayment",
+      deletePayment: "Payment/deletePayment"
+    }),
+    
+    async initialize() {
+      await this.getPayment({
+        page:1
       });
+      this.payments = this.dataTable;
+      console.log("payment: ", this.payments)
+    },
+    
+    async handlePayment() {
+      await this.createPayment(this.newPayment);
+      if(!this.error) {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = 'Forma de pagamento cadastrada com sucesso!'
+        this.snackbar = true;
+       } else {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = 'Forma de pagamento já cadastrada!'
+        this.snackbar = true;
+       }
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.products[this.editedIndex], this.editedItem);
-      } else {
-        this.products.push(this.editedItem);
-      }
-      this.close();
-    },
+    async deleteItem(item){
+      await this.deletePayment(item._id);
+      if(!this.error) 
+        await this.initialize();
+        this.msg = 'Forma de pagamento detelada!'
+        this.snackbar = true;
+
+    }
   },
 };
 </script>

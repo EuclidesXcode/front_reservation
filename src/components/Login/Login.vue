@@ -40,7 +40,7 @@
                   v-if="loading"
                   :size="30"
                   color="primary"
-                  :indeterminate="laoding"
+                  indeterminate
                 ></v-progress-circular>
               </v-row>
             </v-col>

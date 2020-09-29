@@ -270,7 +270,7 @@ export default {
         await this.initialize();
         console.log("error clients: ", this.error)
         this.dialog = false;
-        this.msg = "Cliente já cadastrado!";
+        this.msg = this.error.msg;
         this.snackbar = true;
       }
     },
