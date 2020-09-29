@@ -5,7 +5,7 @@ export default {
         commit('CLEAR_ERROR');
         try{
             await api.post('/clients/createClient', payload);
-            console.log("payload : ", payload);
+            console.log("payload : ")
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
