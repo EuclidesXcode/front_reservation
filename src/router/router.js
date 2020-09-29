@@ -13,7 +13,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/login',
+      path: '/',
       component: Login,
       meta: {
         showMenu: false
