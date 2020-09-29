@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import Login from './login/index';
+import Login from './Login/index';
 import User from './user/index';
 import Clients from './clients/index';
 
