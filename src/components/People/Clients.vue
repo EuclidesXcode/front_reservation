@@ -111,6 +111,13 @@
 
                       <v-col cols="12" md="3">
                         <v-text-field
+                          v-model="newClient.cep"
+                          label="CEP *"
+                        ></v-text-field>
+                      </v-col>
+
+                      <v-col cols="12" md="3">
+                        <v-text-field
                           v-model="newClient.address"
                           label="Endereço *"
                         ></v-text-field>
@@ -120,13 +127,6 @@
                         <v-text-field
                           v-model="newClient.complement"
                           label="Complemento"
-                        ></v-text-field>
-                      </v-col>
-
-                      <v-col cols="12" md="3">
-                        <v-text-field
-                          v-model="newClient.cep"
-                          label="CEP *"
                         ></v-text-field>
                       </v-col>
 
@@ -259,8 +259,8 @@ export default {
     },
 
     async hendleSubmit() {
-      console.log("o que eu envio: ", this.newClient);
       await this.createClient(this.newClient);
+      console.log("o que eu envio: ", this.newClient);
       if (!this.error) {
         await this.initialize();
         this.dialog = false;
