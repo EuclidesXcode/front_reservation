@@ -94,16 +94,28 @@
           <v-card-text>
             <v-container>
               <v-row>
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-select :items="clientes" label="Selecione o Cliente"></v-select>
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-select :items="ensaios" label="Selecione o Ensaio"></v-select>
                 </v-col>
 
-                <v-col cols="12" md="4">
+                <v-col cols="12" md="3">
                   <v-select :items="pagamento" label="Forma de Pagamento"></v-select>
+                </v-col>
+
+                <v-col cols="12" md="2">
+                  <v-select :items="parcelado" label="Parcelas"></v-select>
+                </v-col>
+
+                <v-col cols="12" md="1">
+                  <v-checkbox
+                    v-model="checkbox"
+                    label="Sinal"
+                    required
+                  ></v-checkbox>
                 </v-col>
 
                 <v-col cols="12" md="4">
@@ -199,6 +211,7 @@ export default {
     clientes: ["Cliente 1", "Cliente 2", "Cliente 3", "Cliente 4"],
     ensaios: ["Ensaio 1", "Ensaio 2", "Ensaio 3", "Ensaio 4"],
     pagamento: ["Pagamento 1", "Pagamento 2", "Pagamento 3", "Pagamento 4"],
+    parcelado: ["A vista", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x"]
   }),
 
   computed: {},

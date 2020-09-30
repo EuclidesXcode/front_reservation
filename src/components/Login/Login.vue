@@ -88,7 +88,7 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     laoding: false,
-    msg: "E-mail e/ou senha inválidos!",
+    msg: "Eroooouuu!!!! da zero pra ele!!",
     snackbar: false,
     email: "",
     password: "",

@@ -75,7 +75,7 @@ export default {
   data: () => ({
     timestamp: '',
     items: [
-      { title: "Dashboard", icon: "mdi-view-dashboard", link: "/dashboard" },
+      { title: "Gráficos", icon: "mdi-view-dashboard", link: "/dashboard" },
       { title: "Agenda", icon: mdiBookAccount, link: "/reservation" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
