@@ -29,16 +29,53 @@
 
       <v-tab-item>
         <v-card flat>
-          <v-data-table :headers="headers" :items="payments" sort-by="quant" class="elevation-1">
-            <template v-slot:item.quant="{ item }">
-              <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
+          <v-data-table
+            :headers="headers"
+            :items="payments"
+            sort-by="name"
+            class="elevation-4"
+          >
+            <template v-slot:top>
+              <v-dialog v-model="dialogEdit" max-width="800px">
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                    <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" sm="6" md="12">
+                          <v-text-field
+                            v-model="editedItem.name"
+                            label="Forma de Pagamento"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="ma-2" color="primary" text @click="save" dark>
+                      Salvar
+                      <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                    </v-btn>
+
+                    <v-btn class="ma-2" color="red" text @click="close" dark>
+                      Cancelar
+                      <v-icon dark right>mdi-cancel</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
-              <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-            </template>
-            <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">Reset</v-btn>
+              <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
             </template>
           </v-data-table>
         </v-card>
@@ -101,15 +138,20 @@ import { mdiCashMultiple, mdiCashPlus } from "@mdi/js";
 
 export default {
   data: () => ({
+    formTitle: "Editar Forma de Pagamento",
     snackbar: false,
     msg: '',
-    newPayment: {},
     dialog: false,
+    dialogEdit: false,
     headers: [
       { text: "Forma de Pagamento", value: "name" },
       { text: "Ações", value: "actions", sortable: false },
     ],
     payments: [],
+    defaultItem: {},
+    editedItem: {},
+    editedIndex: -1,
+    newPayment: {},
     icons: {
       icon: mdiCashMultiple,
       iconAdd: mdiCashPlus,
@@ -121,7 +163,16 @@ export default {
     ...mapGetters({
       error: "Payment/getError",
       dataTable: "Payment/getPayment"
-    })
+    }),
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+  },
+  
+  watch: {
+    dialogEdit(val) {
+      val || this.close();
+    },
   },
   
   async created() {
@@ -164,8 +215,30 @@ export default {
         await this.initialize();
         this.msg = 'Forma de pagamento detelada!'
         this.snackbar = true;
+    },
 
-    }
+    editItem(item) {
+      this.editedIndex = this.payments.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogEdit = true;
+    },
+
+    close() {
+      this.dialogEdit = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.payments[this.editedIndex], this.editedItem);
+      } else {
+        this.payments.push(this.editedItem);
+      }
+      this.close();
+    },
   },
 };
 </script>

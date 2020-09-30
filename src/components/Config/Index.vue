@@ -1,13 +1,13 @@
 <template>
-  <v-card color="basil">
+  <v-card>
 
-    <v-tabs v-model="tab" background-color="transparent" color="basil" grow>
+    <v-tabs v-model="tab" background-color="transparent" grow>
       <v-tab v-for="item in items" :key="item">{{ item.title }} <v-icon id="titleIcon">{{ item.icon }}</v-icon></v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items  v-model="tab">
       <v-tab-item v-for="item in items" :key="item">
-        <v-card color="basil" flat>
+        <v-card flat>
           <component id="component" :is="item.component" />
         </v-card>
       </v-tab-item>

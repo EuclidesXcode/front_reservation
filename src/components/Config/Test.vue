@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card >
     <v-card-title>
       Ensaios
       <v-icon id="titleIcon">{{ icons.icon }}</v-icon>

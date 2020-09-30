@@ -32,22 +32,127 @@
           <v-data-table
             :headers="headers"
             :items="clients"
-            sort-by="status"
-            class="elevation-1"
+            sort-by="codNumber"
+            class="elevation-4"
           >
-            <template v-slot:item.status="{ item }">
-              <v-chip :color="getColor(item.status)" dark>{{
-                item.status
-              }}</v-chip>
+            <template v-slot:top>
+              <v-dialog v-model="dialogEdit" max-width="80%">
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">{{ formTitle }}</span>
+                    <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
+                  </v-card-title>
+
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.codNumber"
+                            label="Numero do Cadastro "
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.name"
+                            label="Nome do Resposável *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.babyName"
+                            label="Nome do Bebê *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.cpf"
+                            label="CPF *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.cep"
+                            label="CEP *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.address"
+                            label="Endereço *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.complement"
+                            label="Complemento"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.bairro"
+                            label="Bairro"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.city"
+                            label="Cidade *"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.celPhone"
+                            label="Celular"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.phone"
+                            label="Telefone"
+                          ></v-text-field>
+                        </v-col>
+
+                        <v-col cols="12" md="3">
+                          <v-text-field
+                            v-model="editedItem.email"
+                            label="E-mail"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn class="ma-2" color="primary" text @click="save" dark>
+                      Salvar
+                      <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
+                    </v-btn>
+
+                    <v-btn class="ma-2" color="red" text @click="close" dark>
+                      Cancelar
+                      <v-icon dark right>mdi-cancel</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)"
-                >mdi-pencil</v-icon
-              >
-              <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
-            </template>
-            <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">Reset</v-btn>
+              <v-icon small class="mr-2" @click="editItem(item)">
+                mdi-pencil
+              </v-icon>
+              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
             </template>
           </v-data-table>
         </v-card>
@@ -210,19 +315,25 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
-    search: '',
+    formTitle: "Editar Cliente",
+    search: "",
     msg: "",
     dialog: false,
+    dialogEdit: false,
     snackbar: false,
     clients: [],
     headers: [
+      { text: "N° Cadastro", value: "codNumber" },
       { text: "Nome", value: "name" },
       { text: "Bebê", value: "babyName" },
       { text: "CPF", value: "cpf" },
-      { text: "Cidade", value: "city" },
-      { text: "Telefone", value: "phone" },
+      { text: "Bairro", value: "bairro" },
+      { text: "Celular", value: "celPhone" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    defaultItem: {},
+    editedItem: {},
+    editedIndex: -1,
     newClient: {},
     icons: {
       icon: mdiCardAccountDetails,
@@ -236,10 +347,19 @@ export default {
       error: "Clients/getError",
       dataTable: "Clients/getClients",
     }),
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
   },
 
   async created() {
     await this.initialize();
+  },
+
+  watch: {
+    dialogEdit(val) {
+      val || this.close();
+    },
   },
 
   methods: {
@@ -268,7 +388,7 @@ export default {
         this.snackbar = true;
       } else {
         await this.initialize();
-        console.log("error clients: ", this.error)
+        console.log("error clients: ", this.error);
         this.dialog = false;
         this.msg = this.error.msg;
         this.snackbar = true;
@@ -280,6 +400,29 @@ export default {
       if (!this.error) await this.initialize();
       this.msg = "Cliente detelado!";
       this.snackbar = true;
+    },
+
+    editItem(item) {
+      this.editedIndex = this.clients.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogEdit = true;
+    },
+
+    close() {
+      this.dialogEdit = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.clients[this.editedIndex], this.editedItem);
+      } else {
+        this.clients.push(this.editedItem);
+      }
+      this.close();
     },
   },
 };
