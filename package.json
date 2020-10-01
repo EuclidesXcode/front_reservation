@@ -11,9 +11,11 @@
   "dependencies": {
     "@mdi/js": "^5.3.45",
     "axios": "^0.19.2",
+    "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
     "vue": "^2.6.11",
+    "vue-chartjs": "^3.5.1",
     "vue-router": "^3.3.2",
     "vueex": "^0.1.4",
     "vuejs-jwt": "^1.1.0",
