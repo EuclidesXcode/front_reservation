@@ -95,7 +95,7 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-select :items="clientes" label="Selecione o Cliente"></v-select>
+                  <v-select :items="clientsName.name" label="Selecione o Cliente"></v-select>
                 </v-col>
 
                 <v-col cols="12" md="3">
@@ -187,6 +187,7 @@
 
 <script>
 import { mdiBookAccount, mdiBookPlusMultiple } from "@mdi/js";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
@@ -194,6 +195,7 @@ export default {
     text: "Agendamento cadastrado com sucesso!",
     dialog: false,
     arrayEvents: null,
+    clientsName: [],
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
@@ -214,7 +216,12 @@ export default {
     parcelado: ["A vista", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x"]
   }),
 
-  computed: {},
+  computed: {
+    ...mapGetters({
+      error: "Clients/getError",
+      dataClients: "Clients/getClients",
+    }),
+  },
 
   watch: {
     dialog(val) {
@@ -222,8 +229,8 @@ export default {
     },
   },
 
-  created() {
-    this.initialize();
+  async created() {
+    await this.initialize();
   },
 
   mounted() {
@@ -236,7 +243,16 @@ export default {
   },
 
   methods: {
-    initialize() {
+    ...mapActions({
+    getClients: "Clients/getClients",
+  }),
+    async initialize() {
+      await this.getClients({
+        page: 1,
+        noLimit: true,
+      });
+      this.clientsName = this.dataClients;
+      console.log("dataClients: ", this.dataClients);
       this.products = [
         {
           numberRegistre: "001",

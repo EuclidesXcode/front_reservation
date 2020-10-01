@@ -366,7 +366,8 @@ export default {
     ...mapActions({
       getClients: "Clients/getClients",
       createClient: "Clients/createClient",
-      deleteClient: "Clinets/deleteClient",
+      updateClient: "Clients/updateClient",
+      deleteClient: "Clients/deleteClient",
     }),
 
     async initialize() {
@@ -374,8 +375,13 @@ export default {
         page: 1,
         noLimit: true,
       });
-      this.clients = this.dataTable;
-      console.log("datatable: ", this.dataTable);
+      if(!this.dataTable) {
+        this.msg = this.error.msg;
+        this.snackbar = true;
+      } else {
+        this.clients = this.dataTable;
+        console.log("datatable: ", this.dataTable);
+      }
     },
 
     async hendleSubmit() {
@@ -397,9 +403,16 @@ export default {
 
     async deleteItem(item) {
       await this.deleteClient(item._id);
-      if (!this.error) await this.initialize();
-      this.msg = "Cliente detelado!";
-      this.snackbar = true;
+      if (!this.error) {
+        console.log("entrou no ok")
+        await this.initialize();
+        this.msg = "Cliente detelado!";
+        this.snackbar = true;
+      } else {
+        console.log("entrou no erro")
+        this.msg = this.error.msg;
+        this.snackbar = true;
+      }
     },
 
     editItem(item) {
@@ -416,11 +429,24 @@ export default {
       });
     },
 
-    save() {
+    async save() {
       if (this.editedIndex > -1) {
         Object.assign(this.clients[this.editedIndex], this.editedItem);
       } else {
-        this.clients.push(this.editedItem);
+      await this.updateClient(this.editedItem);
+      console.log("o que eu envio: ", this.editedItem);
+      if (!this.error) {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = "Cliente editado com sucesso!";
+        this.snackbar = true;
+      } else {
+        await this.initialize();
+        console.log("error clients: ", this.error);
+        this.dialog = false;
+        this.msg = this.error.msg;
+        this.snackbar = true;
+      }
       }
       this.close();
     },

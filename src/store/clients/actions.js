@@ -11,6 +11,16 @@ export default {
             commit('SET_ERROR', error.response.data);
         }
     },
+    async updateClient({commit}, payload){
+        commit('CLEAR_ERROR');
+        try{
+            await api.post(`/clients/${payload}`, payload);
+            console.log("payload : ", payload);
+        }
+        catch(error) {
+            commit('SET_ERROR', error.response.data);
+        }
+    },
     async getClients({commit}, payload){
         commit('CLEAR_ERROR');
         try{
