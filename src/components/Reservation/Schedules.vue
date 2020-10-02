@@ -8,16 +8,28 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.productName" label="Produto"></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.productName"
+                      label="Produto"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.ean" label="EAN-13"></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.ean"
+                      label="EAN-13"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.quant" label="Estoque"></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.quant"
+                      label="Estoque"
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.price" label="Preço"></v-text-field>
+                    <v-text-field
+                      v-model="editedItem.price"
+                      label="Preço"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-container>
@@ -40,7 +52,9 @@
       <v-snackbar v-model="snackbar" top="top">
         {{ text }}
         <template v-slot:action="{ attrs }">
-          <v-btn color="green" text v-bind="attrs" @click="snackbar = false">Close</v-btn>
+          <v-btn color="green" text v-bind="attrs" @click="snackbar = false"
+            >Close</v-btn
+          >
         </template>
       </v-snackbar>
 
@@ -54,17 +68,27 @@
 
     <v-tabs horizontal>
       <v-tab left>
-        <v-icon left>{{ icons.icon }}</v-icon>Dados de Agendamento
+        <v-icon left>{{ icons.icon }}</v-icon
+        >Dados de Agendamento
       </v-tab>
 
       <v-tab-item>
         <v-card flat>
-          <v-data-table :headers="headers" :items="products" sort-by="quant" class="elevation-1">
+          <v-data-table
+            :headers="headers"
+            :items="products"
+            sort-by="quant"
+            class="elevation-1"
+          >
             <template v-slot:item.quant="{ item }">
-              <v-chip :color="getColor(item.quant)" dark>{{ item.quant }}</v-chip>
+              <v-chip :color="getColor(item.quant)" dark>{{
+                item.quant
+              }}</v-chip>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
+              <v-icon small class="mr-2" @click="editItem(item)"
+                >mdi-pencil</v-icon
+              >
               <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:no-data>
@@ -95,15 +119,24 @@
             <v-container>
               <v-row>
                 <v-col cols="12" md="3">
-                  <v-select :items="clientsName.name" label="Selecione o Cliente"></v-select>
+                  <v-select
+                    :items="clientsSelect"
+                    label="Selecione o Cliente"
+                  ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="3">
-                  <v-select :items="ensaios" label="Selecione o Ensaio"></v-select>
+                  <v-select
+                    :items="testsSelect"
+                    label="Selecione o Ensaio"
+                  ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="3">
-                  <v-select :items="pagamento" label="Forma de Pagamento"></v-select>
+                  <v-select
+                    :items="paymentSelect"
+                    label="Forma de Pagamento"
+                  ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="2">
@@ -117,52 +150,49 @@
                     required
                   ></v-checkbox>
                 </v-col>
-
                 <v-col cols="12" md="4">
                   <div>
                     <div class="subheading">Selecione a data</div>
                     <v-date-picker
                       v-model="date2"
-                      :event-color="date => date[9] % 2 ? 'red' : 'yellow'"
+                      :event-color="(date) => (date[9] % 2 ? 'red' : 'blue')"
                       :events="functionEvents"
-                    ></v-date-picker>
+                      elevation="3"
+                    >
+                    </v-date-picker>
                   </div>
                 </v-col>
 
                 <v-col cols="12" md="4">
                   <div class="subheading">Selecione um horário</div>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="10:00"
-                    required
-                  ></v-checkbox>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="11:00"
-                    required
-                  ></v-checkbox>
-                  <v-checkbox
-                    v-model="checkbox"
-                    :rules="[v => !!v || 'You must agree to continue!']"
-                    label="12:00"
-                    required
-                  ></v-checkbox>
+                  <v-time-picker v-model="picker" elevation="3"></v-time-picker>
                 </v-col>
 
                 <v-col cols="12" md="4">
-                  <div class="subheading">Data e hora selecionada</div>
-                  <v-text-field value="22/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
-                  <v-text-field value="24/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
-                  <v-text-field value="26/09/2020 - 10:00" label="Solo" solo readonly></v-text-field>
+                  <template>
+                    <v-combobox
+                      :v-model="dates"
+                      multiple
+                      chips
+                      small-chips
+                      label="Datas selecionadas"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                    ></v-combobox>
+                  </template>
                 </v-col>
               </v-row>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn class="ma-2" color="primary" text @click="dialog = false, snackbar = true" dark>
+            <v-btn
+              class="ma-2"
+              color="primary"
+              text
+              @click="(dialog = false), (snackbar = true)"
+              dark
+            >
               Salvar
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
@@ -191,11 +221,16 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    menu: false,
     snackbar: false,
     text: "Agendamento cadastrado com sucesso!",
     dialog: false,
     arrayEvents: null,
-    clientsName: [],
+    clientsSelect: [],
+    testsSelect: [],
+    paymentSelect: [],
+    picker: null,
+    dates: [],
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
@@ -206,6 +241,36 @@ export default {
       { text: "Data Próximo Ensaio", value: "newTestDate" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    products: [
+      {
+        numberRegistre: "001",
+        parents: "Euclides Silva",
+        baby: "Joaquim Silva",
+        test: "Ensaio NewBorn",
+        newTestDate: "29/09/2020 - 10:30",
+      },
+      {
+        numberRegistre: "001",
+        parents: "Euclides Silva",
+        baby: "Joaquim Silva",
+        test: "Ensaio NewBorn",
+        newTestDate: "29/09/2020 - 10:30",
+      },
+      {
+        numberRegistre: "001",
+        parents: "Euclides Silva",
+        baby: "Joaquim Silva",
+        test: "Ensaio NewBorn",
+        newTestDate: "29/09/2020 - 10:30",
+      },
+      {
+        numberRegistre: "001",
+        parents: "Euclides Silva",
+        baby: "Joaquim Silva",
+        test: "Ensaio NewBorn",
+        newTestDate: "29/09/2020 - 10:30",
+      },
+    ],
     icons: {
       icon: mdiBookAccount,
       iconAdd: mdiBookPlusMultiple,
@@ -213,13 +278,28 @@ export default {
     clientes: ["Cliente 1", "Cliente 2", "Cliente 3", "Cliente 4"],
     ensaios: ["Ensaio 1", "Ensaio 2", "Ensaio 3", "Ensaio 4"],
     pagamento: ["Pagamento 1", "Pagamento 2", "Pagamento 3", "Pagamento 4"],
-    parcelado: ["A vista", "2x", "3x", "4x", "5x", "6x", "7x", "8x", "9x", "10x"]
+    parcelado: [
+      "A vista",
+      "2x",
+      "3x",
+      "4x",
+      "5x",
+      "6x",
+      "7x",
+      "8x",
+      "9x",
+      "10x",
+    ],
   }),
 
   computed: {
     ...mapGetters({
-      error: "Clients/getError",
+      errorClient: "Clients/getError",
       dataClients: "Clients/getClients",
+      dataTests: "Tests/getTest",
+      errorTest: "Tests/getError",
+      dataPayment: "Payment/getPayment",
+      errorPayment: "Payment/getError",
     }),
   },
 
@@ -244,51 +324,43 @@ export default {
 
   methods: {
     ...mapActions({
-    getClients: "Clients/getClients",
-  }),
+      getClients: "Clients/getClients",
+      getTest: "Tests/getTest",
+      getPayment: "Payment/getPayment",
+    }),
     async initialize() {
       await this.getClients({
         page: 1,
         noLimit: true,
       });
-      this.clientsName = this.dataClients;
-      console.log("dataClients: ", this.dataClients);
-      this.products = [
-        {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
-        },
-        {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
-        },
-        {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
-        },
-        {
-          numberRegistre: "001",
-          parents: "Euclides Silva",
-          baby: "Joaquim Silva",
-          test: "Ensaio NewBorn",
-          newTestDate: "29/09/2020 - 10:30",
-        },
-      ];
+      this.clientsSelect = await this.dataClients.map(
+        (items) => items.codNumber
+      );
+
+      await this.getTest({
+        page: 1,
+      });
+      this.testsSelect = await this.dataTests.map((items) => items.name);
+
+      await this.getPayment({
+        page: 1,
+      });
+      this.paymentSelect = await this.dataPayment.map((items) => items.name);
+      console.log(
+        "AAAA",
+        this.clientsSelect,
+        "BBBB",
+        this.testsSelect,
+        "CCCC",
+        this.paymentSelect
+      );
     },
 
     functionEvents(date) {
+      console.log("selecionado: ", date);
       const [, , day] = date.split("-");
       if ([12, 17, 28].includes(parseInt(day, 10))) return true;
-      if ([1, 19, 22].includes(parseInt(day, 10))) return ["red", "#00f"];
+      if ([1, 19, 22].includes(parseInt(day, 10))) return ["red"] || ["blue"];
       return false;
     },
 
