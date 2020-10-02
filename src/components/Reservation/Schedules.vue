@@ -150,22 +150,28 @@
                     required
                   ></v-checkbox>
                 </v-col>
-                <v-col cols="12" md="4">
-                  <div>
-                    <div class="subheading">Selecione a data</div>
-                    <v-date-picker
-                      v-model="date2"
-                      :event-color="(date) => (date[9] % 2 ? 'red' : 'blue')"
-                      :events="functionEvents"
-                      elevation="3"
-                    >
-                    </v-date-picker>
-                  </div>
+                <v-col cols="12" sm="4">
+                  <v-date-picker
+                    v-model="dates"
+                    multiple
+                    elevation="3"
+                  ></v-date-picker>
                 </v-col>
 
                 <v-col cols="12" md="4">
                   <div class="subheading">Selecione um horário</div>
                   <v-time-picker v-model="picker" elevation="3"></v-time-picker>
+                </v-col>
+                <!--                 
+                <v-col cols="12" md="4">
+                  <div>
+                    <div class="subheading">Selecione a data</div>
+                    <v-date-picker
+                      v-model="date2"
+                      elevation="3"
+                    >
+                    </v-date-picker>
+                  </div>
                 </v-col>
 
                 <v-col cols="12" md="4">
@@ -174,12 +180,22 @@
                       :v-model="dates"
                       multiple
                       chips
-                      small-chips
                       label="Datas selecionadas"
                       prepend-icon="mdi-calendar"
                       readonly
                     ></v-combobox>
                   </template>
+                </v-col> -->
+
+                <v-col cols="12" sm="4">
+                  <v-text-field
+                    multiple
+                    chips
+                    v-model="dateRangeText"
+                    label="Datas selecionadas"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                  ></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -301,6 +317,9 @@ export default {
       dataPayment: "Payment/getPayment",
       errorPayment: "Payment/getError",
     }),
+    dateRangeText() {
+      return this.dates.join(" ~ ");
+    },
   },
 
   watch: {
