@@ -179,7 +179,6 @@
                   ></v-text-field>
                   <v-text-field
                     multiple
-                    chips
                     v-model="times"
                     label="Horário selecionado"
                     prepend-icon="mdi-calendar"
@@ -200,7 +199,7 @@
                       </thead>
                       <tbody>
                         <tr v-for="item in agendamentos" :key="item">
-                          <td>{{ item.data }}</td>
+                          <td>{{ item.data[0] }}</td>
                           <td>{{ item.hora }}</td>
                         </tr>
                       </tbody>
@@ -256,7 +255,7 @@ export default {
     testsSelect: [],
     paymentSelect: [],
     picker: null,
-    dates: [],
+    dates: null,
     times: [],
     agendamentos: [],
     date1: new Date().toISOString().substr(0, 10),
@@ -330,7 +329,7 @@ export default {
       errorPayment: "Payment/getError",
     }),
     dateRangeText() {
-      return this.dates[0]
+      return this.dates
     },
   },
 
