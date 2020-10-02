@@ -151,6 +151,7 @@
                   ></v-checkbox>
                 </v-col>
                 <v-col cols="12" sm="4">
+                  <div class="subheading">Selecione uma data</div>
                   <v-date-picker
                     v-model="dates"
                     multiple
@@ -160,42 +161,51 @@
 
                 <v-col cols="12" md="4">
                   <div class="subheading">Selecione um horário</div>
-                  <v-time-picker v-model="picker" elevation="3"></v-time-picker>
+                  <v-time-picker
+                    v-model="times"
+                    @click:minute="setTime(time)"
+                    elevation="3"
+                  ></v-time-picker>
                 </v-col>
-                <!--                 
-                <v-col cols="12" md="4">
-                  <div>
-                    <div class="subheading">Selecione a data</div>
-                    <v-date-picker
-                      v-model="date2"
-                      elevation="3"
-                    >
-                    </v-date-picker>
-                  </div>
-                </v-col>
-
-                <v-col cols="12" md="4">
-                  <template>
-                    <v-combobox
-                      :v-model="dates"
-                      multiple
-                      chips
-                      label="Datas selecionadas"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                    ></v-combobox>
-                  </template>
-                </v-col> -->
 
                 <v-col cols="12" sm="4">
                   <v-text-field
                     multiple
                     chips
                     v-model="dateRangeText"
-                    label="Datas selecionadas"
+                    label="Data selecionada"
                     prepend-icon="mdi-calendar"
                     readonly
                   ></v-text-field>
+                  <v-text-field
+                    multiple
+                    chips
+                    v-model="times"
+                    label="Horário selecionado"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                  ></v-text-field>
+
+                  <v-btn class="mx-2" @click="add()" fab dark color="blue">
+                    <v-icon dark> mdi-plus </v-icon>
+                  </v-btn>
+
+                  <v-simple-table>
+                    <template v-slot:default>
+                      <thead>
+                        <tr>
+                          <th class="text-left">Data</th>
+                          <th class="text-left">Hora</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="item in agendamentos" :key="item">
+                          <td>{{ item.data }}</td>
+                          <td>{{ item.hora }}</td>
+                        </tr>
+                      </tbody>
+                    </template>
+                  </v-simple-table>
                 </v-col>
               </v-row>
             </v-container>
@@ -247,6 +257,8 @@ export default {
     paymentSelect: [],
     picker: null,
     dates: [],
+    times: [],
+    agendamentos: [],
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
@@ -318,7 +330,7 @@ export default {
       errorPayment: "Payment/getError",
     }),
     dateRangeText() {
-      return this.dates.join(" ~ ");
+      return this.dates[0]
     },
   },
 
@@ -347,6 +359,9 @@ export default {
       getTest: "Tests/getTest",
       getPayment: "Payment/getPayment",
     }),
+    async setTime(time) {
+      await this.times.push(time);
+    },
     async initialize() {
       await this.getClients({
         page: 1,
@@ -381,6 +396,12 @@ export default {
       if ([12, 17, 28].includes(parseInt(day, 10))) return true;
       if ([1, 19, 22].includes(parseInt(day, 10))) return ["red"] || ["blue"];
       return false;
+    },
+
+    async add(){
+      await this.agendamentos.push({data: this.dates, hora: this.times});
+      this.dates = []
+      this.times = []
     },
 
     getColor(quant) {
