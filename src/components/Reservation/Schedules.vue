@@ -62,7 +62,7 @@
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
-        label="Consulte agendamentos por N° de cadastro ou responsável..."
+        label="Consulte agendamentos por N° de Cliente, Cnsaio, Status..."
       ></v-text-field>
     </v-card-title>
 
@@ -91,9 +91,6 @@
               >
               <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
-            <template v-slot:no-data>
-              <v-btn color="primary" @click="initialize">Reset</v-btn>
-            </template>
           </v-data-table>
         </v-card>
       </v-tab-item>
@@ -120,27 +117,36 @@
               <v-row>
                 <v-col cols="12" md="3">
                   <v-select
+                    v-model="clientSelected"
                     :items="clientsSelect"
+                    item-text="cod"
+                    item-value="id"
                     label="Selecione o Cliente"
                   ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="3">
                   <v-select
+                    v-model="testSelected"
                     :items="testsSelect"
+                    item-text="name"
+                    item-value="id"
                     label="Selecione o Ensaio"
                   ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="3">
                   <v-select
+                    v-model="paymentSelected"
                     :items="paymentSelect"
+                    item-text="name"
+                    item-value="id"
                     label="Forma de Pagamento"
                   ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="2">
-                  <v-select :items="parcelado" label="Parcelas"></v-select>
+                  <v-select v-model="plots" :items="parcelado" label="Parcelas"></v-select>
                 </v-col>
 
                 <v-col cols="12" md="1">
@@ -215,7 +221,7 @@
               class="ma-2"
               color="primary"
               text
-              @click="(dialog = false), (snackbar = true)"
+              @click="hendleSubmit()"
               dark
             >
               Salvar
@@ -246,6 +252,11 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    checkbox: false,
+    clientSelected: '',
+    testSelected: '',
+    paymentSelected: '',
+    plots: '',
     menu: false,
     snackbar: false,
     text: "Agendamento cadastrado com sucesso!",
@@ -261,43 +272,13 @@ export default {
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
-      { text: "N° Cadastro", value: "numberRegistre" },
-      { text: "Responsável", value: "parents" },
-      { text: "Bebê", value: "baby" },
+      { text: "Cliente", value: "clientId" },
       { text: "Ensaio", value: "test" },
-      { text: "Data Próximo Ensaio", value: "newTestDate" },
+      { text: "Data Próximo Ensaio", value: "plots" },
+      { text: "Status", value: "status"},
       { text: "Ações", value: "actions", sortable: false },
     ],
-    products: [
-      {
-        numberRegistre: "001",
-        parents: "Euclides Silva",
-        baby: "Joaquim Silva",
-        test: "Ensaio NewBorn",
-        newTestDate: "29/09/2020 - 10:30",
-      },
-      {
-        numberRegistre: "001",
-        parents: "Euclides Silva",
-        baby: "Joaquim Silva",
-        test: "Ensaio NewBorn",
-        newTestDate: "29/09/2020 - 10:30",
-      },
-      {
-        numberRegistre: "001",
-        parents: "Euclides Silva",
-        baby: "Joaquim Silva",
-        test: "Ensaio NewBorn",
-        newTestDate: "29/09/2020 - 10:30",
-      },
-      {
-        numberRegistre: "001",
-        parents: "Euclides Silva",
-        baby: "Joaquim Silva",
-        test: "Ensaio NewBorn",
-        newTestDate: "29/09/2020 - 10:30",
-      },
-    ],
+    products: [],
     icons: {
       icon: mdiBookAccount,
       iconAdd: mdiBookPlusMultiple,
@@ -321,6 +302,8 @@ export default {
 
   computed: {
     ...mapGetters({
+      errorSchedules: "Schedules/getError",
+      dataSchedules: "Schedules/getSchedules",
       errorClient: "Clients/getError",
       dataClients: "Clients/getClients",
       dataTests: "Tests/getTest",
@@ -354,6 +337,8 @@ export default {
 
   methods: {
     ...mapActions({
+      getSchedules: "Schedules/getSchedules",
+      createSchedules: "Schedules/createSchedules",
       getClients: "Clients/getClients",
       getTest: "Tests/getTest",
       getPayment: "Payment/getPayment",
@@ -367,18 +352,19 @@ export default {
         noLimit: true,
       });
       this.clientsSelect = await this.dataClients.map(
-        (items) => items.codNumber
+        (items) => ({cod: items.codNumber, id: items._id})
       );
+      console.log("clients: ", this.clientsSelect)
 
       await this.getTest({
         page: 1,
       });
-      this.testsSelect = await this.dataTests.map((items) => items.name);
+      this.testsSelect = await this.dataTests.map((items) => ({name: items.name, id: items._id}));
 
       await this.getPayment({
         page: 1,
       });
-      this.paymentSelect = await this.dataPayment.map((items) => items.name);
+      this.paymentSelect = await this.dataPayment.map((items) => ({name: items.name, id: items._id}));
       console.log(
         "AAAA",
         this.clientsSelect,
@@ -401,6 +387,33 @@ export default {
       await this.agendamentos.push({data: this.dates, hora: this.times});
       this.dates = []
       this.times = []
+    },
+
+    async hendleSubmit() {
+      const schedule = [{
+        clientId: this.clientSelected,
+        testId: this.testSelected,
+        paymentId: this.paymentSelected,
+        plotsId: this.plots,
+        sinal: this.checkbox,
+        listSchedules: this.agendamentos
+      }] 
+
+      console.log("to enviando: ", schedule);
+
+      await this.createSchedules(schedule);
+      console.log("passou do envio")
+      if (!this.error) {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = "Agendamento cadastrado com sucesso!";
+        this.snackbar = true;
+      } else {
+        await this.initialize();
+        this.dialog = false;
+        this.msg = this.error.msg;
+        this.snackbar = true;
+      }
     },
 
     getColor(quant) {
