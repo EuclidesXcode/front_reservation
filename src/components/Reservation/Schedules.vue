@@ -146,7 +146,11 @@
                 </v-col>
 
                 <v-col cols="12" md="2">
-                  <v-select v-model="plots" :items="parcelado" label="Parcelas"></v-select>
+                  <v-select
+                    v-model="plots"
+                    :items="parcelado"
+                    label="Parcelas"
+                  ></v-select>
                 </v-col>
 
                 <v-col cols="12" md="1">
@@ -175,25 +179,30 @@
                 </v-col>
 
                 <v-col cols="12" sm="4">
-                  <v-text-field
-                    multiple
-                    chips
-                    v-model="dateRangeText"
-                    label="Data selecionada"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                  ></v-text-field>
-                  <v-text-field
-                    multiple
-                    v-model="times"
-                    label="Horário selecionado"
-                    prepend-icon="mdi-calendar"
-                    readonly
-                  ></v-text-field>
+                  <v-row>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        multiple
+                        chips
+                        v-model="dateRangeText"
+                        label="Data"
+                        prepend-icon="mdi-calendar"
+                        readonly
+                      ></v-text-field>
+                    </v-col>
 
-                  <v-btn class="mx-2" @click="add()" fab dark color="blue">
-                    <v-icon dark> mdi-plus </v-icon>
-                  </v-btn>
+                    <v-col cols="12" sm="6">
+                      <v-text-field
+                        multiple
+                        v-model="times"
+                        label="Hora"
+                        readonly
+                      ></v-text-field>
+                    </v-col>
+                    <v-btn class="mx-2" @click="add()" fab dark color="blue">
+                      <v-icon dark> mdi-plus </v-icon>
+                    </v-btn>
+                  </v-row>
 
                   <v-simple-table>
                     <template v-slot:default>
@@ -211,6 +220,10 @@
                       </tbody>
                     </template>
                   </v-simple-table>
+                </v-col>
+
+                <v-col cols="12" sm="12">
+                  <v-text-field v-model="obs" label="Observação"></v-text-field>
                 </v-col>
               </v-row>
             </v-container>
@@ -253,10 +266,10 @@ import { mapActions, mapGetters } from "vuex";
 export default {
   data: () => ({
     checkbox: false,
-    clientSelected: '',
-    testSelected: '',
-    paymentSelected: '',
-    plots: '',
+    clientSelected: "",
+    testSelected: "",
+    paymentSelected: "",
+    plots: "",
     menu: false,
     snackbar: false,
     text: "Agendamento cadastrado com sucesso!",
@@ -275,7 +288,7 @@ export default {
       { text: "Cliente", value: "clientId" },
       { text: "Ensaio", value: "test" },
       { text: "Data Próximo Ensaio", value: "plots" },
-      { text: "Status", value: "status"},
+      { text: "Observação", value: "obs" },
       { text: "Ações", value: "actions", sortable: false },
     ],
     products: [],
@@ -312,7 +325,7 @@ export default {
       errorPayment: "Payment/getError",
     }),
     dateRangeText() {
-      return this.dates
+      return this.dates;
     },
   },
 
@@ -351,20 +364,27 @@ export default {
         page: 1,
         noLimit: true,
       });
-      this.clientsSelect = await this.dataClients.map(
-        (items) => ({cod: items.codNumber, id: items._id})
-      );
-      console.log("clients: ", this.clientsSelect)
+      this.clientsSelect = await this.dataClients.map((items) => ({
+        cod: items.codNumber,
+        id: items._id,
+      }));
+      console.log("clients: ", this.clientsSelect);
 
       await this.getTest({
         page: 1,
       });
-      this.testsSelect = await this.dataTests.map((items) => ({name: items.name, id: items._id}));
+      this.testsSelect = await this.dataTests.map((items) => ({
+        name: items.name,
+        id: items._id,
+      }));
 
       await this.getPayment({
         page: 1,
       });
-      this.paymentSelect = await this.dataPayment.map((items) => ({name: items.name, id: items._id}));
+      this.paymentSelect = await this.dataPayment.map((items) => ({
+        name: items.name,
+        id: items._id,
+      }));
       console.log(
         "AAAA",
         this.clientsSelect,
@@ -383,26 +403,28 @@ export default {
       return false;
     },
 
-    async add(){
-      await this.agendamentos.push({data: this.dates, hora: this.times});
-      this.dates = []
-      this.times = []
+    async add() {
+      await this.agendamentos.push({ data: this.dates, hora: this.times });
+      this.dates = [];
+      this.times = [];
     },
 
     async hendleSubmit() {
-      const schedule = [{
-        clientId: this.clientSelected,
-        testId: this.testSelected,
-        paymentId: this.paymentSelected,
-        plotsId: this.plots,
-        sinal: this.checkbox,
-        listSchedules: this.agendamentos
-      }] 
+      const schedule = [
+        {
+          clientId: this.clientSelected,
+          testId: this.testSelected,
+          paymentId: this.paymentSelected,
+          plotsId: this.plots,
+          sinal: this.checkbox,
+          listSchedules: this.agendamentos,
+        },
+      ];
 
       console.log("to enviando: ", schedule);
 
       await this.createSchedules(schedule);
-      console.log("passou do envio")
+      console.log("passou do envio");
       if (!this.error) {
         await this.initialize();
         this.dialog = false;

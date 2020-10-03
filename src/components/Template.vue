@@ -66,6 +66,7 @@ import {
   mdiAccount,
   mdiBookAccount,
   mdiAccountGroup,
+  mdiCartOutline,
   mdiCog 
 } from "@mdi/js";
 export default {
@@ -77,6 +78,7 @@ export default {
     items: [
       { title: "Gráficos", icon: "mdi-view-dashboard", link: "/dashboard" },
       { title: "Agenda", icon: mdiBookAccount, link: "/reservation" },
+      { title: "Vendas", icon: mdiCartOutline, link: "/sales" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },
       { title: "Usuários", icon: mdiAccount, link: "/users" },
       { title: "Configurações", icon: mdiCog , link: "/config" },
