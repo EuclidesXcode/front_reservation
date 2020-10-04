@@ -7,7 +7,6 @@ export default {
             await api.post('/tests', payload);
         }
         catch(error) {
-            console.log("error do catch: ", error.response.data);
             commit('SET_ERROR', error.response.data);
         }
     },
@@ -18,7 +17,6 @@ export default {
             commit('SET_TEST', data.items);
         }
         catch(error) {
-            console.log("error do catch: ", error.response.data);
             commit('SET_ERROR', error.response.data);
         }
     },
@@ -28,7 +26,6 @@ export default {
             await api.delete(`/tests/${payload}`);
         }
         catch(error) {
-            console.log("error do catch: ", error.response.data);
             commit('SET_ERROR', error.response.data);
         }
     }

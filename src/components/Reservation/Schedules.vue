@@ -76,7 +76,7 @@
         <v-card flat>
           <v-data-table
             :headers="headers"
-            :items="products"
+            :items="schedules"
             sort-by="quant"
             class="elevation-1"
           >
@@ -291,7 +291,7 @@ export default {
       { text: "Observação", value: "obs" },
       { text: "Ações", value: "actions", sortable: false },
     ],
-    products: [],
+    schedules: [],
     icons: {
       icon: mdiBookAccount,
       iconAdd: mdiBookPlusMultiple,
@@ -360,6 +360,12 @@ export default {
       await this.times.push(time);
     },
     async initialize() {
+      await this.getSchedules({
+        page: 1
+      });
+      this.schedules = this.dataSchedules;
+      console.log("Agendamentos: ", this.schedules);
+      
       await this.getClients({
         page: 1,
         noLimit: true,
@@ -368,7 +374,6 @@ export default {
         cod: items.codNumber,
         id: items._id,
       }));
-      console.log("clients: ", this.clientsSelect);
 
       await this.getTest({
         page: 1,
@@ -385,14 +390,6 @@ export default {
         name: items.name,
         id: items._id,
       }));
-      console.log(
-        "AAAA",
-        this.clientsSelect,
-        "BBBB",
-        this.testsSelect,
-        "CCCC",
-        this.paymentSelect
-      );
     },
 
     functionEvents(date) {

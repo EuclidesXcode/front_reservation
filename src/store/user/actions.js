@@ -18,7 +18,6 @@ export default {
             commit('SET_USER', data.items);
         }
         catch(error) {
-            console.log("error do catch: ", error.response.data);
             commit('SET_ERROR', error.response.data);
         }
     },
@@ -28,7 +27,6 @@ export default {
             await api.delete(`/user/${payload}`);
         }
         catch(error) {
-            console.log("error do catch: ", error.response.data);
             commit('SET_ERROR', error.response.data);
         }
     }

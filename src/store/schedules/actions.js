@@ -5,7 +5,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             await api.post('/schedules/', payload);
-            console.log("payload : ", payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -15,7 +14,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             await api.post(`/schedules/${payload}`, payload);
-            console.log("payload : ", payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -25,7 +23,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/schedules/get', payload);
-            console.log("data items: ", data)
             commit('SET_SCHEDULES', data.items);
         }
         catch(error) {

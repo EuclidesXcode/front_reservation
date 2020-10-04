@@ -5,7 +5,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             await api.post('/clients/createClient', payload);
-            console.log("payload : ", payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -15,7 +14,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             await api.post(`/clients/${payload}`, payload);
-            console.log("payload : ", payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -25,7 +23,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/clients/get', payload);
-            console.log("data items: ", data)
             commit('SET_CLIENT', data.items);
         }
         catch(error) {
