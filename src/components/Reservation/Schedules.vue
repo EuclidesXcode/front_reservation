@@ -363,8 +363,7 @@ export default {
       await this.getSchedules({
         page: 1
       });
-      this.schedules = this.dataSchedules;
-      console.log("Agendamentos: ", this.schedules);
+      console.log("Agendamentos: ", this.dataSchedules);
       
       await this.getClients({
         page: 1,
@@ -412,7 +411,7 @@ export default {
           clientId: this.clientSelected,
           testId: this.testSelected,
           paymentId: this.paymentSelected,
-          plotsId: this.plots,
+          plots: this.plots,
           sinal: this.checkbox,
           listSchedules: this.agendamentos,
         },

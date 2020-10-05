@@ -35,23 +35,31 @@
 <script>
 import Test from './Test';
 import Payment from './Payment';
+import Products from './Products';
+import Services from './Services';
 import {
   mdiMovieOpen,
-  mdiCashMultiple 
+  mdiCashMultiple,
+  mdiTagMultiple,
+  mdiTrayFull
 } from "@mdi/js";
 
 export default {
   components: {
     // eslint-disable-next-line vue/no-unused-components
     Test: Test,
-    Payment: Payment
+    Payment: Payment,
+    Products: Products,
+    Services: Services
   },
   data() {
     return {
       tab: null,
       items: [
         { title: "Ensaios", component: Test, icon: mdiMovieOpen },
-        { title: "Formas de Pagamento", component: Payment, icon: mdiCashMultiple  }
+        { title: "Formas de Pagamento", component: Payment, icon: mdiCashMultiple  },
+        { title: "Produtos", component: Products, icon: mdiTagMultiple  },
+        { title: "Serviços", component: Services, icon: mdiTrayFull  }
       ]
     };
   }

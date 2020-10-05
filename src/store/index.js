@@ -6,6 +6,9 @@ import Clients from './clients/index';
 import Payment from './payment/index';
 import Tests from './tests/index';
 import Schedules from './schedules/index';
+import Products from './products/index';
+// import Sales from './Sales/index';
+import Services from './services/index';
 
 Vue.use(Vuex);
 
@@ -16,7 +19,10 @@ const store = new Vuex.Store({
         Clients,
         Payment,
         Tests,
-        Schedules
+        Schedules,
+        Products,
+        // Sales,
+        Services
     }
 });
 

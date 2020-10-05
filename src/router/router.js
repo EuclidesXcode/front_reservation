@@ -6,6 +6,7 @@ import Config from '../components/Config/Index.vue'
 import Reservation from '../components/Reservation/Reservation.vue'
 import People from '../components/People/People.vue'
 import Users from '../components/Users/Users.vue'
+import Sales from '../components/Sales/Sales.vue'
 
 Vue.use(Router);
 
@@ -29,6 +30,13 @@ const router = new Router({
     {
       path: '/reservation',
       component: Reservation,
+      meta: {
+        showMenu: true
+      }
+    },
+    {
+      path: '/sales',
+      component: Sales,
       meta: {
         showMenu: true
       }

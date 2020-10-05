@@ -4,7 +4,7 @@ export default {
     async createSchedules({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            await api.post('/schedules/', payload);
+            await api.post('/schedule/post/', payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -13,7 +13,7 @@ export default {
     async updateSchedule({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            await api.post(`/schedules/${payload}`, payload);
+            await api.post(`/schedule/${payload}`, payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
@@ -22,7 +22,7 @@ export default {
     async getSchedules({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            const {data} = await api.post('/schedules/get', payload);
+            const {data} = await api.post('/schedule/get', payload);
             commit('SET_SCHEDULES', data.items);
         }
         catch(error) {
@@ -32,7 +32,7 @@ export default {
     async deleteSchedule({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            await api.delete(`/schedules/${payload}`);
+            await api.delete(`/schedule/${payload}`);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
