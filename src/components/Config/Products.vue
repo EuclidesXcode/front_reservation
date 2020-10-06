@@ -209,7 +209,7 @@ export default {
     ...mapActions({
       getProducts: "Products/getProducts",
       createProduct: "Products/createProduct",
-      deleteProduct: "Products/deleteTest",
+      deleteProduct: "Products/deleteProduct",
     }),
     async initialize() {
       await this.getProducts({

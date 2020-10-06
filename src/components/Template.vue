@@ -67,7 +67,8 @@ import {
   mdiBookAccount,
   mdiAccountGroup,
   mdiCartOutline,
-  mdiCog 
+  mdiCog,
+  mdiCalendarMonth
 } from "@mdi/js";
 export default {
   props: {
@@ -76,7 +77,7 @@ export default {
   data: () => ({
     timestamp: '',
     items: [
-      { title: "Gráficos", icon: "mdi-view-dashboard", link: "/dashboard" },
+      { title: "Resumo Mensal", icon: mdiCalendarMonth, link: "/dashboard" },
       { title: "Agenda", icon: mdiBookAccount, link: "/reservation" },
       { title: "Vendas", icon: mdiCartOutline, link: "/sales" },
       { title: "Clientes", icon: mdiAccountGroup, link: "/people" },

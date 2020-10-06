@@ -212,15 +212,15 @@ export default {
       deleteService: "Services/deleteService",
     }),
     async initialize() {
-      await this.getTest({
+      await this.getServices({
         page: 1,
       });
       this.services = this.dataTable;
-      console.log("tests: ", this.services);
+      console.log("Servicess: ", this.services);
     },
 
     async hendleSubmit() {
-      await this.createTest(this.newService);
+      await this.createService(this.newService);
       console.log("estou enviando: ", this.newService);
       if (!this.error) {
         await this.initialize();
@@ -236,7 +236,7 @@ export default {
     },
 
     async deleteItem(item) {
-      await this.deleteTest(item._id);
+      await this.deleteService(item._id);
       if (!this.error) await this.initialize();
       this.msg = "Ensaio detelado!";
       this.snackbar = true;
