@@ -4,7 +4,7 @@
       <v-sheet height="64">
         <v-toolbar flat>
           <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-            Today
+            Hoje
           </v-btn>
           <v-btn fab text small color="grey darken-2" @click="prev">
             <v-icon small> mdi-chevron-left </v-icon>
