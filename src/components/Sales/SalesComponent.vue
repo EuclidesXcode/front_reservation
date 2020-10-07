@@ -30,7 +30,7 @@
         <v-card flat>
           <v-data-table
             :headers="headersProducts"
-            :items="products"
+            :items="salesProducts"
             sort-by="name"
             class="elevation-4"
           >
@@ -195,7 +195,6 @@
           </v-card-title>
           <v-card-text>
             <v-container>
-
               <!-- Produtos -->
               <v-tabs horizontal>
                 <v-tab left>
@@ -205,36 +204,32 @@
                 <!-- Produtos -->
                 <v-tab-item>
                   <v-row>
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        v-model="newUser.name"
-                        label="Nome*"
-                      ></v-text-field>
+                    <v-col cols="12" md="6">
+                      <v-autocomplete v-model="productList"></v-autocomplete>
                     </v-col>
 
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        v-model="newUser.email"
-                        label="E-mail *"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules="[rules.required, rules.min]"
-                        :type="showPass ? 'text' : 'password'"
-                        v-model="newUser.password"
-                        label="Senha *"
-                        hint="At least 8 characters"
-                        counter
-                        @click:append="showPass = !showPass"
-                      ></v-text-field>
+                    <v-col cols="12" md="6">
+                      <v-simple-table>
+                        <template v-slot:default>
+                          <thead>
+                            <tr>
+                              <th class="text-left">Produtos</th>
+                              <th class="text-left">Preço</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="item in productSeler" :key="item">
+                              <td>{{ item.name }}</td>
+                              <td>{{ item.price }}</td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
                     </v-col>
                   </v-row>
                 </v-tab-item>
-    
-              <!-- Serviços -->
+
+                <!-- Serviços -->
                 <v-tab left>
                   <v-icon left>{{ icons.iconAdd }}</v-icon
                   >Nova venda de Serviços
@@ -242,48 +237,43 @@
                 <!-- Produtos -->
                 <v-tab-item>
                   <v-row>
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        v-model="newUser.name"
-                        label="Nome*"
-                      ></v-text-field>
+                    <v-col cols="12" md="6">
+                      <v-autocomplete v-model="services.name"></v-autocomplete>
                     </v-col>
 
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        v-model="newUser.email"
-                        label="E-mail *"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="4">
-                      <v-text-field
-                        :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules="[rules.required, rules.min]"
-                        :type="showPass ? 'text' : 'password'"
-                        v-model="newUser.password"
-                        label="Senha *"
-                        hint="At least 8 characters"
-                        counter
-                        @click:append="showPass = !showPass"
-                      ></v-text-field>
+                    <v-col cols="12" md="6">
+                      <v-simple-table>
+                        <template v-slot:default>
+                          <thead>
+                            <tr>
+                              <th class="text-left">Serviços</th>
+                              <th class="text-left">Preço</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="item in services" :key="item">
+                              <td>{{ item.name }}</td>
+                              <td>{{ item.price }}</td>
+                            </tr>
+                          </tbody>
+                        </template>
+                      </v-simple-table>
                     </v-col>
                   </v-row>
                 </v-tab-item>
               </v-tabs>
-
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
               class="ma-2"
-              color="primary"
+              color="success"
               text
               @click="hendleSubmit()"
               dark
             >
-              Salvar
+              Vender
               <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
             </v-btn>
 
@@ -319,6 +309,8 @@ export default {
     snackbar: false,
     search: "",
     msg: "",
+    productList: [],
+    productSeler: [],
     showPass: false,
     dialogEdit: false,
     password: "",
@@ -360,6 +352,8 @@ export default {
   computed: {
     ...mapGetters({
       error: "Sales/getError",
+      errorProduct: "Products/getError",
+      dataProducts: "Products/getProducts",
       dataSaleProduct: "Sales/getSalesProducts",
       dataSaleService: "Sales/getSalesServices",
     }),
@@ -380,6 +374,7 @@ export default {
 
   methods: {
     ...mapActions({
+      getProducts: "Products/getProducts",
       getSalesProducts: "Sales/getSalesProducts",
       getSalesServices: "Sales/getProducts",
       createSaleProduct: "Sales/createSaleProduct",
@@ -388,12 +383,12 @@ export default {
       deleteSaleService: "Sales/deleteSaleService",
     }),
     async initialize() {
-      await this.getUser({
+      await this.getProducts({
         page: 1,
         noLimit: true,
       });
-      this.users = this.dataTable;
-      console.log("datatable: ", this.dataTable);
+      this.products = this.dataProducts;
+      console.log("datatable: ", this.dataProducts);
     },
 
     async hendleSubmit() {
