@@ -279,7 +279,7 @@ export default {
     testsSelect: [],
     paymentSelect: [],
     picker: null,
-    dates: null,
+    dates: [],
     times: [],
     agendamentos: [],
     date1: new Date().toISOString().substr(0, 10),
@@ -406,6 +406,11 @@ export default {
     },
 
     async hendleSubmit() {
+      console.log("agendamentos: => ---", this.agendamentos);
+      const datas = await this.agendamentos.map((items) => ({
+        data: items.data[0],
+        hora: items.hora,
+      }));
       const schedule = [
         {
           clientId: this.clientSelected,
@@ -413,7 +418,8 @@ export default {
           paymentId: this.paymentSelected,
           plots: this.plots,
           sinal: this.checkbox,
-          listSchedules: this.agendamentos,
+          listSchedules: datas,
+          obs: this.obs
         },
       ];
 

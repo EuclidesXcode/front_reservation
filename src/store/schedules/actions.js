@@ -4,7 +4,7 @@ export default {
     async createSchedules({commit}, payload){
         commit('CLEAR_ERROR');
         try{
-            await api.post('/schedule/post/', payload);
+            await api.post('/schedule/post', payload);
         }
         catch(error) {
             commit('SET_ERROR', error.response.data);
