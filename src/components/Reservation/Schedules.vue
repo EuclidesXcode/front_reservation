@@ -120,7 +120,7 @@
                     v-model="clientSelected"
                     :items="clientsSelect"
                     item-text="cod"
-                    item-value="id"
+                    item-value="name"
                     label="Selecione o Cliente"
                   ></v-select>
                 </v-col>
@@ -130,7 +130,7 @@
                     v-model="testSelected"
                     :items="testsSelect"
                     item-text="name"
-                    item-value="id"
+                    item-value="name"
                     label="Selecione o Ensaio"
                   ></v-select>
                 </v-col>
@@ -140,7 +140,7 @@
                     v-model="paymentSelected"
                     :items="paymentSelect"
                     item-text="name"
-                    item-value="id"
+                    item-value="name"
                     label="Forma de Pagamento"
                   ></v-select>
                 </v-col>
@@ -285,7 +285,7 @@ export default {
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
-      { text: "Cliente", value: "clientId" },
+      { text: "Cliente", value: "client" },
       { text: "Ensaio", value: "test" },
       { text: "Data Próximo Ensaio", value: "plots" },
       { text: "Observação", value: "obs" },
@@ -411,17 +411,16 @@ export default {
         data: items.data[0],
         hora: items.hora,
       }));
-      const schedule = [
+      const schedule = 
         {
-          clientId: this.clientSelected,
-          testId: this.testSelected,
-          paymentId: this.paymentSelected,
+          client: this.clientSelected,
+          test: this.testSelected,
+          payment: this.paymentSelected,
           plots: this.plots,
           sinal: this.checkbox,
           listSchedules: datas,
           obs: this.obs
-        },
-      ];
+        };
 
       console.log("to enviando: ", schedule);
 
