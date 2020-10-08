@@ -13,24 +13,6 @@
                       label="Produto"
                     ></v-text-field>
                   </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.ean"
-                      label="EAN-13"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.quant"
-                      label="Estoque"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.price"
-                      label="Preço"
-                    ></v-text-field>
-                  </v-col>
                 </v-row>
               </v-container>
             </v-card-text>
@@ -80,15 +62,8 @@
             sort-by="quant"
             class="elevation-1"
           >
-            <template v-slot:item.quant="{ item }">
-              <v-chip :color="getColor(item.quant)" dark>{{
-                item.quant
-              }}</v-chip>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)"
-                >mdi-pencil</v-icon
-              >
+            <template v-slot:item.actions="{item}">
+              <v-icon small class="mr-2" @click="editItem(item)">mdi-pencil</v-icon>
               <v-icon small @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
           </v-data-table>
@@ -265,6 +240,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    search: '',
     checkbox: false,
     clientSelected: "",
     testSelected: "",
@@ -281,13 +257,14 @@ export default {
     picker: null,
     dates: [],
     times: [],
+    obd: '',
     agendamentos: [],
     date1: new Date().toISOString().substr(0, 10),
     date2: new Date().toISOString().substr(0, 10),
     headers: [
       { text: "Cliente", value: "client" },
       { text: "Ensaio", value: "test" },
-      { text: "Data Próximo Ensaio", value: "plots" },
+      { text: "Data Próximo Ensaio", value: "nextPlots" },
       { text: "Observação", value: "obs" },
       { text: "Ações", value: "actions", sortable: false },
     ],
@@ -363,7 +340,17 @@ export default {
       await this.getSchedules({
         page: 1
       });
-      console.log("Agendamentos: ", this.dataSchedules);
+      const shedules = await this.dataSchedules.map((items) => ({
+        id: items._id,
+        client: items.client,
+        test: items.test,
+        nextTest: 'Dia '+items.listSchedules[0].data+' às '+items.listSchedules[0].hora,
+        obs: items.obs,
+        payment: items.payment,
+        plots: items.plots
+      }));
+      this.shedules = await shedules.map((items) => (items));
+      console.log("Agendamentos: ", this.shedules);
       
       await this.getClients({
         page: 1,
@@ -373,6 +360,7 @@ export default {
         cod: items.codNumber,
         id: items._id,
       }));
+      console.log("Clientes: ", this.clientsSelect);
 
       await this.getTest({
         page: 1,
