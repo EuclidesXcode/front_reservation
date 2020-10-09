@@ -264,7 +264,7 @@ export default {
     headers: [
       { text: "Cliente", value: "client" },
       { text: "Ensaio", value: "test" },
-      { text: "Data Próximo Ensaio", value: "nextPlots" },
+      { text: "Data Próximo Ensaio", value: "nextTest" },
       { text: "Observação", value: "obs" },
       { text: "Ações", value: "actions", sortable: false },
     ],
@@ -340,7 +340,8 @@ export default {
       await this.getSchedules({
         page: 1
       });
-      const shedules = await this.dataSchedules.map((items) => ({
+      // this.schedules = this.dataSchedules;
+      const schedules = await this.dataSchedules.map((items) => ({
         id: items._id,
         client: items.client,
         test: items.test,
@@ -349,8 +350,8 @@ export default {
         payment: items.payment,
         plots: items.plots
       }));
-      this.shedules = await shedules.map((items) => (items));
-      console.log("Agendamentos: ", this.shedules);
+      this.schedules = await schedules.map((items) => (items));
+      console.log("Agendamentos: ", this.schedules);
       
       await this.getClients({
         page: 1,
