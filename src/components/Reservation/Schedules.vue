@@ -2,15 +2,15 @@
   <v-card>
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialogEdit" max-width="500px">
           <v-card>
             <v-card-text>
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.productName"
-                      label="Produto"
+                      v-model="editedItem.client"
+                      label="Cliente"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -240,6 +240,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   data: () => ({
+    msg: '',
     search: '',
     checkbox: false,
     clientSelected: "",
@@ -250,6 +251,7 @@ export default {
     snackbar: false,
     text: "Agendamento cadastrado com sucesso!",
     dialog: false,
+    dialogEdit: false,
     arrayEvents: null,
     clientsSelect: [],
     testsSelect: [],
@@ -268,6 +270,9 @@ export default {
       { text: "Observação", value: "obs" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    defaultItem: {},
+    editedItem: {},
+    editedIndex: -1,
     schedules: [],
     icons: {
       icon: mdiBookAccount,
@@ -329,6 +334,7 @@ export default {
     ...mapActions({
       getSchedules: "Schedules/getSchedules",
       createSchedules: "Schedules/createSchedules",
+      deleteSchedule: "Schedules/deleteSchedule",
       getClients: "Clients/getClients",
       getTest: "Tests/getTest",
       getPayment: "Payment/getPayment",
@@ -435,19 +441,27 @@ export default {
     },
 
     editItem(item) {
-      this.editedIndex = this.products.indexOf(item);
+      this.editedIndex = this.schedules.indexOf(item);
       this.editedItem = Object.assign({}, item);
-      this.dialog = true;
+      this.dialogEdit = true;
     },
 
-    deleteItem(item) {
-      const index = this.products.indexOf(item);
-      confirm("Certeza que deseja deletar o Produto?") &&
-        this.products.splice(index, 1);
+    async deleteItem(item) {
+      await this.deleteSchedule(item.id);
+      if (!this.error) {
+        console.log("entrou no excluiu o agendamento");
+        this.msg = "Agendamento detelado!";
+        await this.initialize();
+        this.snackbar = true;
+      } else {
+        console.log("entrou no erro ao deletar o agendamento");
+        this.msg = this.error.msg;
+        this.snackbar = true;
+      }
     },
 
     close() {
-      this.dialog = false;
+      this.dialogEdit = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
@@ -456,9 +470,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.products[this.editedIndex], this.editedItem);
+        Object.assign(this.schedules[this.editedIndex], this.editedItem);
       } else {
-        this.products.push(this.editedItem);
+        this.schedules.push(this.editedItem);
       }
       this.close();
     },
