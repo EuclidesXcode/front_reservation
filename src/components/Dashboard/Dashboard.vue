@@ -81,6 +81,8 @@
   </v-row>
 </template>
 <script>
+import { mapActions, mapGetters } from "vuex";
+
 export default {
   data: () => ({
     focus: "",
@@ -104,19 +106,61 @@ export default {
       "orange",
       "grey darken-1",
     ],
-    names: [
-      "NewBorn",
-      "Ensaio do Bebê",
-      "Acompanhamento do Bebê",
-      "Ensaio Temático",
-      "Acompanhamento Completo",
-      "NewBorn + Acompanhamento"
-    ],
+    schedules: [],
+    names: [],
+    datas: []
   }),
+
+  computed: {
+    ...mapGetters({
+      errorSchedules: "Schedules/getError",
+      dataSchedules: "Schedules/getSchedules",
+    }),
+  },
+
   mounted() {
     this.$refs.calendar.checkChange();
   },
+
+  async created() {
+    await this.initialize();
+  },
+
   methods: {
+    ...mapActions({
+      getSchedules: "Schedules/getSchedules",
+      createSchedules: "Schedules/createSchedules",
+      deleteSchedule: "Schedules/deleteSchedule",
+    }),
+    async initialize() {
+      await this.getSchedules({
+        page: 1,
+      });
+      // this.schedules = this.dataSchedules;
+      const schedules = await this.dataSchedules.map((items) => ({
+        id: items._id,
+        client: items.client,
+        test: items.test,
+        nextTest:
+          items.listSchedules[0].data +
+          " " +
+          items.listSchedules[0].hora,
+        obs: items.obs,
+        payment: items.payment,
+        plots: items.plots,
+      }));
+      this.schedules = await schedules.map((items) => items);
+
+      const names = await this.dataSchedules.map((items) => items.test);
+      this.names = names;
+      console.log("o que ta vindo do agendamento: ", this.schedules)
+      
+      const datas = await this.dataSchedules.map((items) => items.listSchedules[0].data+" "+items.listSchedules[0].hora);
+      this.datas = datas;
+      console.log("o que ta vindo do agendamento: ", this.datas)
+
+      console.log("Names Dashboard : ", this.names);
+    },
     viewDay({ date }) {
       this.focus = date;
       this.type = "day";
@@ -161,16 +205,11 @@ export default {
 
       for (let i = 0; i < eventCount; i++) {
         const allDay = this.rnd(0, 3) === 0;
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        const second = new Date(first.getTime() + secondTimestamp);
-
+        console.log("all day: ", this.datas);
         events.push({
-          name: this.names[this.rnd(0, this.names.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
+          name: this.names[0],
+          start: this.datas[0],
+          color: this.colors[0],
           timed: !allDay,
         });
       }
