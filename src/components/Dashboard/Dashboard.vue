@@ -108,7 +108,7 @@ export default {
     ],
     schedules: [],
     names: [],
-    datas: []
+    datas: [],
   }),
 
   computed: {
@@ -142,9 +142,7 @@ export default {
         client: items.client,
         test: items.test,
         nextTest:
-          items.listSchedules[0].data +
-          " " +
-          items.listSchedules[0].hora,
+          items.listSchedules[0].data + " " + items.listSchedules[0].hora,
         obs: items.obs,
         payment: items.payment,
         plots: items.plots,
@@ -153,11 +151,14 @@ export default {
 
       const names = await this.dataSchedules.map((items) => items.test);
       this.names = names;
-      console.log("o que ta vindo do agendamento: ", this.schedules)
-      
-      const datas = await this.dataSchedules.map((items) => items.listSchedules[0].data+" "+items.listSchedules[0].hora);
+      console.log("o que ta vindo do agendamento: ", this.schedules);
+
+      const datas = await this.dataSchedules.map(
+        (items) =>
+          items.listSchedules[0].data + " " + items.listSchedules[0].hora
+      );
       this.datas = datas;
-      console.log("o que ta vindo do agendamento: ", this.datas)
+      console.log("o que ta vindo do agendamento: ", this.datas);
 
       console.log("Names Dashboard : ", this.names);
     },
@@ -204,14 +205,12 @@ export default {
       const eventCount = this.rnd(days, days + 20);
 
       for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0;
         console.log("all day: ", this.datas);
-        events.push({
-          name: this.names[0],
-          start: this.datas[0],
-          color: this.colors[0],
-          timed: !allDay,
-        });
+        events.push(this.schedules.map((items) => ({
+            name: items.test,
+            start: items.nextTest,
+            color: this.colors[this.rnd(0, this.colors.length - 1)],
+        })));
       }
 
       this.events = events;
