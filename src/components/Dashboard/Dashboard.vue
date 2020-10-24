@@ -141,8 +141,7 @@ export default {
         id: items._id,
         client: items.client,
         test: items.test,
-        nextTest:
-          items.listSchedules[0].data + " " + items.listSchedules[0].hora,
+        nextTest: items.listSchedules[0].data + " " + items.listSchedules[0].hora,
         obs: items.obs,
         payment: items.payment,
         plots: items.plots,
@@ -206,11 +205,11 @@ export default {
 
       for (let i = 0; i < eventCount; i++) {
         console.log("all day: ", this.datas);
-        events.push(this.schedules.map((items) => ({
-            name: items.test,
-            start: items.nextTest,
+        events.push({
+            name: this.names[0],
+            start: this.datas[0],
             color: this.colors[this.rnd(0, this.colors.length - 1)],
-        })));
+        });
       }
 
       this.events = events;
