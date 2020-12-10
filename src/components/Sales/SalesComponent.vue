@@ -205,7 +205,13 @@
                 <v-tab-item>
                   <v-row>
                     <v-col cols="12" md="6">
-                      <v-autocomplete v-model="productList"></v-autocomplete>
+                      <v-autocomplete
+                        :v-model="products"
+                        label="Selecione o Produto"
+                        :items="products"
+                        item-text="name"
+                        item-value="_id"
+                      ></v-autocomplete>
                     </v-col>
 
                     <v-col cols="12" md="6">
@@ -215,6 +221,7 @@
                             <tr>
                               <th class="text-left">Produtos</th>
                               <th class="text-left">Preço</th>
+                              <th class="text-left">Qntd</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -248,6 +255,7 @@
                             <tr>
                               <th class="text-left">Serviços</th>
                               <th class="text-left">Preço</th>
+                              <th class="text-left">Qntd</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -315,9 +323,8 @@ export default {
     dialogEdit: false,
     password: "",
     rules: {
-      required: (value) => !!value || "Required.",
-      min: (v) => v.length >= 8 || "Min 8 characters",
-      emailMatch: () => "The email and password you entered don't match",
+      required: (value) => !!value || "Campo obrigatório.",
+      min: (v) => v.length >= 8 || "Min 8 caractéres",
     },
     firsstName: "",
     secondName: "",
