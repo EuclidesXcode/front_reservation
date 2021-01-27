@@ -1,7 +1,18 @@
 import api from '../../config/api';
 
 export default {
-    async createSale({commit}, payload){
+    async createSaleProducts({commit}, payload){
+        console.log("payload: ", payload )
+        commit('CLEAR_ERROR');
+        try{
+            await api.post('/sales', payload);
+        }
+        catch(error) {
+            commit('SET_ERROR', error.response.data);
+        }
+    },
+    async createSaleServices({commit}, payload){
+        console.log("payload: ", payload )
         commit('CLEAR_ERROR');
         try{
             await api.post('/sales', payload);
@@ -11,6 +22,7 @@ export default {
         }
     },
     async getSalesProducts({commit}, payload){
+        console.log("enviando os produtos: ", payload);
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/sales/getProducts', payload);

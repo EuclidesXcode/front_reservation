@@ -3,6 +3,7 @@ import api from '../../config/api';
 
 export default {
     async login({commit}, payload){
+        console.log('API: ', api);
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/auth', payload);

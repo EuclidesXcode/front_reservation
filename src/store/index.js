@@ -7,7 +7,7 @@ import Payment from './payment/index';
 import Tests from './tests/index';
 import Schedules from './schedules/index';
 import Products from './products/index';
-// import Sales from './Sales/index';
+import Sales from './sales/index';
 import Services from './services/index';
 
 Vue.use(Vuex);
@@ -21,7 +21,7 @@ const store = new Vuex.Store({
         Tests,
         Schedules,
         Products,
-        // Sales,
+        Sales,
         Services
     }
 });

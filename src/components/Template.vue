@@ -48,9 +48,9 @@
       </div>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <slot />
-    </v-content>
+    </v-main>
 
     <v-footer app>
       <span>NewBorn RJ &copy; 2020</span>

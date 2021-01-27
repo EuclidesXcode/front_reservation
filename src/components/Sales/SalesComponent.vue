@@ -20,8 +20,8 @@
       ></v-text-field>
     </v-card-title>
 
-    <v-tabs horizontal>
-      <v-tab left>
+    <v-tabs horizontal @change="changeFocus(e)">
+      <v-tab left aria-selected="productsTrue">
         <v-icon left>{{ icons.icon }}</v-icon
         >Ultimas Vendas de Produtos
       </v-tab>
@@ -41,37 +41,6 @@
                     <span class="headline">{{ formTitle }}</span>
                     <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
                   </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Nome"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="E-mail"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
-                            :type="showPass ? 'text' : 'password'"
-                            v-model="editedItem.password"
-                            label="Nova Senha"
-                            hint="At least 8 characters"
-                            counter
-                            @click:append="showPass = !showPass"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -100,7 +69,7 @@
 
       <!-- Services -->
 
-      <v-tab left>
+      <v-tab left :aria-selected="changeFocus(e)">
         <v-icon left>{{ icons.icon }}</v-icon
         >Ultimas Vendas de Serviços
       </v-tab>
@@ -119,37 +88,6 @@
                     <span class="headline">{{ formTitle }}</span>
                     <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
                   </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Nome"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="E-mail"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
-                            :type="showPass ? 'text' : 'password'"
-                            v-model="editedItem.password"
-                            label="Nova Senha"
-                            hint="At least 8 characters"
-                            counter
-                            @click:append="showPass = !showPass"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -206,11 +144,13 @@
                   <v-row>
                     <v-col cols="12" md="6">
                       <v-autocomplete
-                        :v-model="products"
+                        :v-model="productSeler"
                         label="Selecione o Produto"
                         :items="products"
                         item-text="name"
                         item-value="_id"
+                        :isLoading="loading"
+                        @change="changeFocus(e)"
                       ></v-autocomplete>
                     </v-col>
 
@@ -228,6 +168,7 @@
                             <tr v-for="item in productSeler" :key="item">
                               <td>{{ item.name }}</td>
                               <td>{{ item.price }}</td>
+                              <td>{{ item.Qntd }}</td>
                             </tr>
                           </tbody>
                         </template>
@@ -313,6 +254,8 @@ import { mdiCartPlus } from "@mdi/js";
 
 export default {
   data: () => ({
+    productsTrue: false,
+    servicesTrue: false,
     formTitle: "Editar Usuário",
     snackbar: false,
     search: "",
@@ -348,8 +291,8 @@ export default {
     defaultItem: {},
     editedItem: {},
     editedIndex: -1,
-    newUser: {},
-    users: [],
+    newSaler: [],
+    seler: [],
     icons: {
       icon: mdiCartOutline,
       iconAdd: mdiCartPlus,
@@ -358,11 +301,11 @@ export default {
 
   computed: {
     ...mapGetters({
-      error: "Sales/getError",
-      errorProduct: "Products/getError",
-      dataProducts: "Products/getProducts",
-      dataSaleProduct: "Sales/getSalesProducts",
-      dataSaleService: "Sales/getSalesServices",
+      error: "sales/getError",
+      errorProduct: "products/getError",
+      dataproducts: "products/getProducts",
+      datapaleProduct: "sales/getSalesProducts",
+      dataSaleService: "sales/getSalesServices",
     }),
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
@@ -380,14 +323,14 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      getProducts: "Products/getProducts",
-      getSalesProducts: "Sales/getSalesProducts",
-      getSalesServices: "Sales/getProducts",
-      createSaleProduct: "Sales/createSaleProduct",
-      createSaleService: "Sales/createSaleService",
-      deleteSaleProduct: "Sales/deleteSaleProduct",
-      deleteSaleService: "Sales/deleteSaleService",
+      ...mapActions({
+      getProducts: "products/getProducts",
+      getSalesProducts: "sales/getSalesProducts",
+      getSalesServices: "sales/getProducts",
+      createSaleProduct: "sales/createSaleProduct",
+      createSaleService: "sales/createSaleService",
+      deleteSaleProduct: "sales/deleteSaleProduct",
+      deleteSaleService: "sales/deleteSaleService",
     }),
     async initialize() {
       await this.getProducts({
@@ -398,30 +341,36 @@ export default {
       console.log("datatable: ", this.dataProducts);
     },
 
-    async hendleSubmit() {
-      await this.createUser(this.newUser);
+    changeFocus(e) {
+      console.log("evento: " , e)
+    },
+
+    async hendleSubmit(props) {
+      console.log("newProduct: ", props)
+      await this.createSaleProduct(this.newSaler);
       if (!this.error) {
         await this.initialize();
         this.dialog = false;
-        this.msg = "Usuário cadastrado com sucesso!";
+        this.msg = "Venda efetuada com sucesso!";
         this.snackbar = true;
       } else {
         await this.initialize();
         this.dialog = false;
-        this.msg = "Usuário já cadastrado!";
+        this.msg = "Venda já cadastrado!";
         this.snackbar = true;
       }
     },
 
     async deleteItem(item) {
-      await this.deleteUser(item._id);
+      await this.deleteSaler(item._id);
       if (!this.error) await this.initialize();
-      this.msg = "Usuário detelado!";
+      this.msg = "Venda detelada!";
       this.snackbar = true;
     },
 
     editItem(item) {
       this.editedIndex = this.sales.indexOf(item);
+      console.log("Index: ", this.editedIndex)
       this.editedItem = Object.assign({}, item);
       this.dialogEdit = true;
     },

@@ -10,7 +10,7 @@
   "main": "background.js",
   "dependencies": {
     "@mdi/js": "^5.3.45",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.9.3",
     "core-js": "^3.6.5",
     "express": "^4.17.1",

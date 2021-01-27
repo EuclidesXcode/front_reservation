@@ -36,12 +36,6 @@
               <v-row>
                 <v-btn class="mr-4" @click="hendleLogin()">Login</v-btn>
                 <v-spacer></v-spacer>
-                <v-progress-circular
-                  v-if="loading"
-                  :size="30"
-                  color="primary"
-                  indeterminate
-                ></v-progress-circular>
               </v-row>
             </v-col>
           </form>
