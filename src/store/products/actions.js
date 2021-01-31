@@ -14,7 +14,6 @@ export default {
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/products/get', payload);
-            console.log("meu payload de produtos: ", data.items)
             commit('SET_PRODUCTS', data.items);
         }
         catch(error) {

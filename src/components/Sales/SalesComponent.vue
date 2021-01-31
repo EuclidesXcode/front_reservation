@@ -30,69 +30,29 @@
         <v-card flat>
           <v-data-table
             :headers="headersProducts"
-            :items="salesProducts"
-            sort-by="name"
-            class="elevation-4"
+            :items="salesProductsGet"
+            :single-expand="singleExpand"
+            :expanded.sync="salesProductsGet.products"
+            item-key="name"
+            show-expand
+            class="elevation-1"
           >
-            <template v-slot:top>
-              <v-dialog v-model="dialogEdit" max-width="70%">
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
-                    <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Nome"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="E-mail"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
-                            :type="showPass ? 'text' : 'password'"
-                            v-model="editedItem.password"
-                            label="Nova Senha"
-                            hint="At least 8 characters"
-                            counter
-                            @click:append="showPass = !showPass"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn class="ma-2" color="primary" text @click="save" dark>
-                      Salvar
-                      <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                    </v-btn>
-
-                    <v-btn class="ma-2" color="red" text @click="close" dark>
-                      Cancelar
-                      <v-icon dark right>mdi-cancel</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-icon small class="mr-2" @click="editItem(item)">
-                mdi-pencil
-              </v-icon>
-              <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length">
+                Detalhes da Venda
+                <table>
+                  <tr>
+                    <th>Produtos</th>
+                    <th>Preço</th>
+                    <th>Quantidade</th>
+                  </tr>
+                  <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.price }}</td>
+                    <td>{{ item.qntd }}</td>
+                  </tr>
+                </table>
+              </td>
             </template>
           </v-data-table>
         </v-card>
@@ -113,58 +73,7 @@
             class="elevation-4"
           >
             <template v-slot:top>
-              <v-dialog v-model="dialogEdit" max-width="70%">
-                <v-card>
-                  <v-card-title>
-                    <span class="headline">{{ formTitle }}</span>
-                    <v-icon id="titleIcon">{{ icons.iconAdd }}</v-icon>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.name"
-                            label="Nome"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            v-model="editedItem.email"
-                            label="E-mail"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" sm="6" md="4">
-                          <v-text-field
-                            :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
-                            :rules="[rules.required, rules.min]"
-                            :type="showPass ? 'text' : 'password'"
-                            v-model="editedItem.password"
-                            label="Nova Senha"
-                            hint="At least 8 characters"
-                            counter
-                            @click:append="showPass = !showPass"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn class="ma-2" color="primary" text @click="save" dark>
-                      Salvar
-                      <v-icon dark right>mdi-checkbox-marked-circle</v-icon>
-                    </v-btn>
-
-                    <v-btn class="ma-2" color="red" text @click="close" dark>
-                      Cancelar
-                      <v-icon dark right>mdi-cancel</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              <!-- Edited Services in here -->
             </template>
             <template v-slot:item.actions="{ item }">
               <v-icon small class="mr-2" @click="editItem(item)">
@@ -206,13 +115,43 @@
                   <v-row>
                     <v-col cols="12" md="6">
                       <v-autocomplete
-                        :v-model="products"
+                        v-model="productSeler.id"
                         label="Selecione o Produto"
                         :items="products"
                         item-text="name"
                         item-value="_id"
+                        @change="handleProductForSale()"
                       ></v-autocomplete>
                     </v-col>
+                    
+                    <v-col cols="12" md="6">
+                      <v-autocomplete
+                        v-model="productSeler.id"
+                        label="Selecione o Produto"
+                        :items="products"
+                        item-text="name"
+                        item-value="_id"
+                        @change="handleProductForSale()"
+                      ></v-autocomplete>
+                    </v-col>
+
+                    <v-dialog v-model="productQntdDialog" max-width="250">
+                      <v-card>
+                        <v-card-text>
+                          <v-container>
+                            <v-row>
+                              <v-col cols="12">
+                                <v-text-field
+                                  v-model="productSeler.qntd"
+                                  label="Quantidade"
+                                ></v-text-field>
+                                <v-btn @click="addQuant"> add </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                        </v-card-text>
+                      </v-card>
+                    </v-dialog>
 
                     <v-col cols="12" md="6">
                       <v-simple-table>
@@ -225,9 +164,10 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <tr v-for="item in productSeler" :key="item">
+                            <tr v-for="item in salesProducts" :key="item">
                               <td>{{ item.name }}</td>
-                              <td>{{ item.price }}</td>
+                              <td v-mask="'####,##'">{{ item.price }}</td>
+                              <td v-mask="'####,##'">{{ item.qntd }}</td>
                             </tr>
                           </tbody>
                         </template>
@@ -313,12 +253,13 @@ import { mdiCartPlus } from "@mdi/js";
 
 export default {
   data: () => ({
-    formTitle: "Editar Usuário",
+    singleExpand: false,
     snackbar: false,
     search: "",
     msg: "",
     productList: [],
     productSeler: [],
+    productQntdDialog: false,
     showPass: false,
     dialogEdit: false,
     password: "",
@@ -332,10 +273,10 @@ export default {
     email: "",
     dialog: false,
     headersProducts: [
-      { text: "Produto", value: "productName" },
-      { text: "Preço", value: "productPrice" },
-      { text: "Quantidade", value: "productQuant" },
-      { text: "Ações", value: "actions", sortable: false },
+      { text: "Cliente", value: "client" },
+      { text: "Valor total", value: "totalValue" },
+      { text: "Status", value: "statusText" },
+      { text: "Data", value: "createdAt", dataType: "Date" },
     ],
     headersServices: [
       { text: "Serviço", value: "serviceName" },
@@ -343,7 +284,14 @@ export default {
       { text: "Quantidade", value: "serviceQuant" },
       { text: "Ações", value: "actions", sortable: false },
     ],
+    saleDetails: [
+      { text: "Produto", value: "item.name" },
+      { text: "Quantidade", value: "item.qntd" },
+      { text: "Valor", value: "item.price" },
+    ],
+    salesProducts: [],
     products: [],
+    salesProductsGet: [],
     services: [],
     defaultItem: {},
     editedItem: {},
@@ -354,6 +302,7 @@ export default {
       icon: mdiCartOutline,
       iconAdd: mdiCartPlus,
     },
+    productSel: null,
   }),
 
   computed: {
@@ -383,33 +332,76 @@ export default {
     ...mapActions({
       getProducts: "Products/getProducts",
       getSalesProducts: "Sales/getSalesProducts",
-      getSalesServices: "Sales/getProducts",
+      getSalesServices: "Sales/getSalesServices",
       createSaleProduct: "Sales/createSaleProduct",
       createSaleService: "Sales/createSaleService",
       deleteSaleProduct: "Sales/deleteSaleProduct",
       deleteSaleService: "Sales/deleteSaleService",
     }),
+
     async initialize() {
       await this.getProducts({
         page: 1,
         noLimit: true,
       });
       this.products = this.dataProducts;
-      console.log("datatable: ", this.dataProducts);
+      await this.getSalesProducts({
+        page: 1,
+        noLimit: true,
+      });
+      this.salesProductsGet = this.dataSaleProduct;
+      this.mountListProductsSales();
+    },
+    mountListProductsSales() {
+      for (let item of this.salesProductsGet) {
+            console.log("chamou: ", item);
+      }
+
+      console.log("vendas: ", this.salesProductsGet);
+    },
+
+    handleProductForSale() {
+      for (let item of this.products) {
+        console.log("item: ", item);
+        if (item._id === this.productSeler.id) {
+          this.productSel = {
+            id: item._id,
+            name: item.name,
+            price: item.price,
+          };
+        }
+      }
+      console.log("mudado: ", this.productSel);
+      this.productQntdDialog = true;
+    },
+
+    addQuant() {
+      this.salesProducts.push({
+        id: this.productSel.id,
+        name: this.productSel.name,
+        price: this.productSel.price,
+        qntd: this.productSeler.qntd,
+      });
+      console.log("ficou assim: ", this.salesProducts);
+      this.productQntdDialog = false;
     },
 
     async hendleSubmit() {
-      await this.createUser(this.newUser);
-      if (!this.error) {
-        await this.initialize();
-        this.dialog = false;
-        this.msg = "Usuário cadastrado com sucesso!";
-        this.snackbar = true;
-      } else {
-        await this.initialize();
-        this.dialog = false;
-        this.msg = "Usuário já cadastrado!";
-        this.snackbar = true;
+      if (this.salesProducts != []) {
+        await this.createSaleProduct(this.salesProducts);
+        if (!this.error) {
+          await this.initialize();
+          this.dialog = false;
+          this.msg = "Venda efetuada com sucesso!";
+          this.snackbar = true;
+        } else {
+          await this.initialize();
+          this.dialog = false;
+          this.msg = "Erro ao efetuar a venda";
+          this.snackbar = true;
+        }
+        this.salesProducts = [];
+        return;
       }
     },
 

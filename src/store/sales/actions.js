@@ -1,7 +1,16 @@
 import api from '../../config/api';
 
 export default {
-    async createSale({commit}, payload){
+    async createSaleProduct({commit}, payload){
+        commit('CLEAR_ERROR');
+        try{
+            await api.post('/sales/send/product', payload);
+        }
+        catch(error) {
+            commit('SET_ERROR', error.response.data);
+        }
+    },
+    async createSaleService({commit}, payload){
         commit('CLEAR_ERROR');
         try{
             await api.post('/sales', payload);
@@ -14,6 +23,7 @@ export default {
         commit('CLEAR_ERROR');
         try{
             const {data} = await api.post('/sales/getProducts', payload);
+            console.log("o data do get: ", data)
             commit('SET_SALES_PRODUCTS', data.items);
         }
         catch(error) {

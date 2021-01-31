@@ -1,83 +1,31 @@
 <template>
   <v-row class="fill-height">
-    <v-col>
-      <v-sheet height="64">
-        <v-toolbar flat>
-          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-            Hoje
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="prev">
-            <v-icon small> mdi-chevron-left </v-icon>
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="next">
-            <v-icon small> mdi-chevron-right </v-icon>
-          </v-btn>
-          <v-toolbar-title v-if="$refs.calendar">
-            {{ $refs.calendar.title }}
-          </v-toolbar-title>
-          <v-spacer></v-spacer>
-          <v-menu bottom right>
-            <template v-slot:activator="{ on, attrs }">
-              <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
-                <span>{{ typeToLabel[type] }}</span>
-                <v-icon right> mdi-menu-down </v-icon>
-              </v-btn>
-            </template>
-            <v-list>
-              <v-list-item @click="type = 'day'">
-                <v-list-item-title>Day</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'week'">
-                <v-list-item-title>Week</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = 'month'">
-                <v-list-item-title>Month</v-list-item-title>
-              </v-list-item>
-              <v-list-item @click="type = '4day'">
-                <v-list-item-title>4 days</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
-      </v-sheet>
-      <v-sheet height="600">
-        <v-calendar
-          ref="calendar"
-          v-model="focus"
-          color="primary"
-          :events="events"
-          :event-color="getEventColor"
-          :type="type"
-          @click:event="showEvent"
-          @click:more="viewDay"
-          @click:date="viewDay"
-          @change="updateRange"
-        ></v-calendar>
-        <v-menu
-          v-model="selectedOpen"
-          :close-on-content-click="false"
-          :activator="selectedElement"
-          offset-x
-        >
-          <v-card color="grey lighten-4" min-width="350px" flat>
-            <v-toolbar :color="selectedEvent.color" dark>
-              <!-- <v-btn icon>
-                <v-icon>mdi-pencil</v-icon>
-              </v-btn> -->
-              <v-toolbar-title v-html="selectedEvent.name"></v-toolbar-title>
-            </v-toolbar>
-            <v-card-text>
-              <span v-html="selectedEvent.details"></span>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn text color="secondary" @click="selectedOpen = false">
-                Fechar
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-menu>
-      </v-sheet>
-    </v-col>
+    <v-card 
+      shaped
+      elevation="3"
+      class="mx-auto" 
+      max-width="344" 
+      v-for="item in schedules" 
+      :key="item.id">
+      <v-card-text>
+        <p class="display-1 text--primary">{{item.test}}</p>
+        <div class="text--primary">
+          <strong>N Cliente:</strong> {{item.client}}
+        </div>
+        <div class="text--primary">
+          <strong>Próximo ensaio:</strong> <br />
+          Dia {{item.nextTest.split(' ', )[0]}} as {{item.nextTest.split(' ',)[1]}}
+        </div>
+        <div class="text--primary">
+          <strong>Observação:</strong> <br />
+          {{item.obs}}
+        </div>
+      </v-card-text>
+      <v-spacer></v-spacer>
+      <v-card-actions>
+        <v-btn text color="deep-purple accent-4"> Editar Ensaio </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-row>
 </template>
 <script>
@@ -141,7 +89,8 @@ export default {
         id: items._id,
         client: items.client,
         test: items.test,
-        nextTest: items.listSchedules[0].data + " " + items.listSchedules[0].hora,
+        nextTest:
+          items.listSchedules[0].data + " " + items.listSchedules[0].hora,
         obs: items.obs,
         payment: items.payment,
         plots: items.plots,
@@ -206,9 +155,9 @@ export default {
       for (let i = 0; i < eventCount; i++) {
         console.log("all day: ", this.datas);
         events.push({
-            name: this.names[0],
-            start: this.datas[0],
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
+          name: this.names[0],
+          start: this.datas[0],
+          color: this.colors[this.rnd(0, this.colors.length - 1)],
         });
       }
 
